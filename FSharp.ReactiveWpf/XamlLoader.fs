@@ -11,12 +11,6 @@ open FSharp.Idioms
 
 /// 从嵌入式资源加载 XAML 并解析为对象
 let loadXaml (assy: Assembly) (name: string) =
-    //use stream = assy.GetManifestResourceStream(name)
-    //if isNull stream then
-    //    failwith $"Resource '{name}' not found in assembly '{assy.GetName()}'."
-    //use sr = new StreamReader(stream)
-    //sr.ReadToEnd()
-
     let str = FSharp.Idioms.String.fromEmbedded assy name
     use sr = new StringReader(str)
     let xr = XmlReader.Create(sr)

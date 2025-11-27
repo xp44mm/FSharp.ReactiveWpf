@@ -10,11 +10,6 @@
 - 📦 **即插即用** - 简单的 API 设计，易于集成
 - 🎨 **MahApps.Metro 支持** - 现代化 UI 控件支持
 
-## 安装
-
-```bash
-dotnet add package FSharp.ReactiveWpf
-```
 
 ## 快速开始
 
@@ -139,19 +134,10 @@ type MainWindow() as this =
 ### 关注点分离
 UI 逻辑与业务逻辑清晰分离，便于测试和维护。
 
-## 依赖项
-
-- .NET 6.0+ / .NET Framework 4.7.2+
-- FSharp.Core
-- System.Reactive
-- MahApps.Metro (用于对话框)
-- WindowsBase
-- PresentationFramework
-
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request！
 
 ## 许可证
 
-LGPL-3.0-or-later
+GPLv3
