@@ -141,3 +141,70 @@ UI 逻辑与业务逻辑清晰分离，便于测试和维护。
 ## 许可证
 
 GPLv3
+
+# MediaPlayer.createPlaylistObservable
+
+## 函数签名
+
+```fsharp
+val createPlaylistObservable : 
+    mediaPlayer:MediaPlayer -> 
+    subject:IObservable<string[]> -> 
+    IObservable<unit>
+```
+
+## 功能描述
+
+创建一个响应式音频播放器，能够监听播放列表序列并自动按顺序播放其中的音频文件。当接收到新的播放列表时，会自动停止当前播放并开始新的播放列表。
+
+## 参数说明
+
+- `mediaPlayer` : `System.Windows.Media.MediaPlayer`  
+  用于实际播放音频的媒体播放器实例
+
+- `subject` : `IObservable<string[]>`  
+  播放列表的观察序列，每次发射一个字符串数组，每个字符串代表一个音频文件的完整路径
+
+## 返回值
+
+返回一个 `IObservable<unit>`，表示播放过程的观察序列。主要用于订阅播放生命周期，实际播放是副作用。
+
+
+
+## 使用示例
+
+### 基本用法
+```fsharp
+let mediaPlayer = new MediaPlayer()
+let playlistSubject = new Subject<string[]>()
+
+// 创建播放器观察序列
+let playback = MediaPlayer.createPlaylistObservable mediaPlayer playlistSubject
+
+// 订阅播放过程（可选）
+use subscription = playback.Subscribe()
+
+// 发送播放列表
+playlistSubject.OnNext([|
+    @"C:\audio\file1.mp3"
+    @"C:\audio\file2.mp3" 
+    @"C:\audio\file3.mp3"
+|])
+```
+
+### 在中文学习应用中的典型用法
+```fsharp
+// 当前单词的拼音列表观察序列
+let currentPlayList =
+    currentRow.Select(fun (word, pinyin) ->
+        pinyin.Split(' ')
+        |> Array.map(fun syllable -> 
+            Path.Combine(audioBasePath, syllable + ".mp3")
+        )
+    )
+
+// 创建并订阅播放器
+(MediaPlayer.createPlaylistObservable mediaPlayer currentPlayList)
+    .Subscribe()
+    |> ignore
+```

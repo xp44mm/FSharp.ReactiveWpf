@@ -1,13 +1,10 @@
 ﻿module FSharp.ReactiveWpf.XamlLoader
 
-open System
 open System.IO
-open System.Xml
-open System.Windows
-open System.Windows.Markup
 open System.Reflection
+open System.Windows.Markup
+open System.Xml
 
-open FSharp.Idioms
 
 /// 从嵌入式资源加载 XAML 并解析为对象
 let loadXaml (assy: Assembly) (name: string) =
