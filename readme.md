@@ -173,7 +173,6 @@ val createPlaylistObservable :
 
 ## 使用示例
 
-### 基本用法
 ```fsharp
 let mediaPlayer = new MediaPlayer()
 let playlistSubject = new Subject<string[]>()
@@ -181,7 +180,7 @@ let playlistSubject = new Subject<string[]>()
 // 创建播放器观察序列
 let playback = MediaPlayer.createPlaylistObservable mediaPlayer playlistSubject
 
-// 订阅播放过程（可选）
+// 订阅播放过程
 use subscription = playback.Subscribe()
 
 // 发送播放列表
@@ -192,19 +191,4 @@ playlistSubject.OnNext([|
 |])
 ```
 
-### 在中文学习应用中的典型用法
-```fsharp
-// 当前单词的拼音列表观察序列
-let currentPlayList =
-    currentRow.Select(fun (word, pinyin) ->
-        pinyin.Split(' ')
-        |> Array.map(fun syllable -> 
-            Path.Combine(audioBasePath, syllable + ".mp3")
-        )
-    )
 
-// 创建并订阅播放器
-(MediaPlayer.createPlaylistObservable mediaPlayer currentPlayList)
-    .Subscribe()
-    |> ignore
-```

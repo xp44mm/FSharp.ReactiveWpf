@@ -16,7 +16,7 @@ let playMany (mediaPlayer: MediaPlayer) (ls: string[]) : IDisposable =
             mediaPlayer.Play()
         )
 
-let createPlaylistObservable (mediaPlayer: MediaPlayer) (subject: IObservable<string[]>) =
+let createPlaylistObservable (mediaPlayer: MediaPlayer) (subject: IObservable<#seq<string>>) =
     subject
         .Select(fun ls ->
             (mediaPlayer.MediaEnded :?> IObservable<_>)
