@@ -19,7 +19,7 @@
 		<Company>34696643@qq.com</Company>
 		<Copyright>xp44mm</Copyright>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-		<Version>0.0.2</Version>
+		<Version>0.0.4</Version>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.ReactiveWpf</RepositoryUrl>
 		<PackageTags>fsharp;reactive;wpf;xaml</PackageTags>
 

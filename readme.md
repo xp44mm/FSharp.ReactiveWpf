@@ -2,16 +2,6 @@
 
 一个用于 F# 和 WPF 的响应式数据绑定库，提供类型安全且函数式的 UI 绑定解决方案。
 
-## 功能特性
-
-- 🚀 **响应式数据绑定** - 基于 Reactive Extensions (Rx) 构建
-- 🎯 **类型安全** - 完整的 F# 类型支持
-- 🔄 **双向绑定** - 支持控件与数据源的双向同步
-- 📦 **即插即用** - 简单的 API 设计，易于集成
-- 🎨 **MahApps.Metro 支持** - 现代化 UI 控件支持
-
-
-## 快速开始
 
 ### 基本数据绑定
 
@@ -89,6 +79,8 @@ if window.ShowDialog() = Nullable true then
 - `getFloat` - 获取浮点数输入
 - `getInt` - 获取整数输入  
 - `getInt64` - 获取64位整数输入
+
+### MediaPlayer.createPlaylistObservable
 
 ## 完整示例
 

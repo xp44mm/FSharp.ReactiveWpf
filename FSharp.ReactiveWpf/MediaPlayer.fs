@@ -19,15 +19,24 @@ let playMany (mediaPlayer: MediaPlayer) (ls: string[]) : IDisposable =
 let createPlaylistObservable (mediaPlayer: MediaPlayer) (subject: IObservable<#seq<string>>) =
     subject
         .Select(fun ls ->
-            (mediaPlayer.MediaEnded :?> IObservable<_>)
-                .Select(fun _ -> 1)
-                .StartWith(0)
-                .Zip(ls.ToObservable(), fun _ path -> path)
-                .Where(File.Exists)
-                .Do(fun path ->
-                    mediaPlayer.Open(Uri(path))
-                    mediaPlayer.Play()
-                )
-                .IgnoreElements()
+            let ls = ls |> Seq.filter(File.Exists)
+
+            if Seq.isEmpty ls then
+                Observable.Empty()
+            else
+                let mediaEvents =
+                    Observable.Merge(
+                        (mediaPlayer.MediaEnded :?> IObservable<_>),
+                        (mediaPlayer.MediaFailed :?> IObservable<_>)
+                    )
+
+                mediaEvents
+                    .StartWith(null)
+                    .Zip(ls.ToObservable(), fun _ path -> path)
+                    .Do(fun path ->
+                        mediaPlayer.Open(Uri(path))
+                        mediaPlayer.Play()
+                    )
+                    .IgnoreElements()
         )
         .Switch()
