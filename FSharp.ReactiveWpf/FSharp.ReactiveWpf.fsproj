@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<OutputType>Library</OutputType>
-		<TargetFramework>net10.0-windows7.0</TargetFramework>
+		<TargetFramework>net10.0-windows</TargetFramework>
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>False</UseWindowsForms>
 		<SatelliteResourceLanguages>zh-Hans;en</SatelliteResourceLanguages>
@@ -11,18 +11,16 @@
 		<Title>一个用于 F# 和 WPF 的响应式数据绑定库，提供类型安全且函数式的 UI 绑定解决方案。</Title>
 		<Description>一个用于 F# 和 WPF 的响应式数据绑定库，提供类型安全且函数式的 UI 绑定解决方案。</Description>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
-		<PackageReleaseNotes>MediaPlayer</PackageReleaseNotes>
+		<PackageReleaseNotes>bindingToggleButton</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Authors>xp44m</Authors>
 		<Company>34696643@qq.com</Company>
 		<Copyright>xp44mm</Copyright>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-		<Version>0.0.4</Version>
+		<Version>0.0.6</Version>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.ReactiveWpf</RepositoryUrl>
 		<PackageTags>fsharp;reactive;wpf;xaml</PackageTags>
-
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -33,7 +31,7 @@
 		<EmbeddedResource Include="TextBoxWindow.xaml" />
 		<Compile Include="XamlLoader.fs" />
 		<Compile Include="MediaPlayer.fs" />
-		<Compile Include="Binding.fs" />
+		<Compile Include="WpfSubscriber.fs" />
 		<Compile Include="TextBoxWindow.fs" />
 		<Compile Include="DependencyObjectUtils.fs" />
 	</ItemGroup>
@@ -46,7 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.Idioms" Version="1.5.3" />
+		<PackageReference Include="FSharp.Idioms" Version="1.5.4" />
 		<PackageReference Include="MahApps.Metro" Version="2.4.11" />
 		<PackageReference Include="System.Reactive" Version="6.1.0" />
 	</ItemGroup>

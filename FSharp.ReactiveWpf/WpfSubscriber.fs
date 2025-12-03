@@ -1,4 +1,4 @@
-﻿module FSharp.ReactiveWpf.Binding
+﻿module FSharp.ReactiveWpf.WpfSubscriber
 
 open System
 open System.Reactive.Linq
@@ -13,7 +13,7 @@ open FSharp.Idioms
 //将文本框的文本内容转换为浮点数
 //将浮点数更新同步回文本框
 let bindingNumberBox
-    (disposables: CompositeDisposable)
+    (disposable: CompositeDisposable)
     (value: BehaviorSubject<float>)
     (textbox: TextBox)
     =
@@ -24,7 +24,7 @@ let bindingNumberBox
         .Select(Option.get)
         .DistinctUntilChanged()
         .Subscribe(fun x -> value.OnNext x)
-    |> disposables.Add
+    |> disposable.Add
 
     value
         .DistinctUntilChanged()
@@ -33,10 +33,10 @@ let bindingNumberBox
             if not textbox.IsFocused then
                 textbox.Text <- text
         )
-    |> disposables.Add
+    |> disposable.Add
 
 let bindingIntegerBox
-    (disposables: CompositeDisposable)
+    (disposable: CompositeDisposable)
     (value: BehaviorSubject<int>)
     (textbox: TextBox)
     =
@@ -47,7 +47,7 @@ let bindingIntegerBox
         .Select(Option.get)
         .DistinctUntilChanged()
         .Subscribe(fun x -> value.OnNext x)
-    |> disposables.Add
+    |> disposable.Add
 
     value
         .DistinctUntilChanged()
@@ -56,10 +56,10 @@ let bindingIntegerBox
             if not textbox.IsFocused then
                 textbox.Text <- text
         )
-    |> disposables.Add
+    |> disposable.Add
 
 let bindingInt64Box
-    (disposables: CompositeDisposable)
+    (disposable: CompositeDisposable)
     (value: BehaviorSubject<int64>)
     (textbox: TextBox)
     =
@@ -70,7 +70,7 @@ let bindingInt64Box
         .Select(Option.get)
         .DistinctUntilChanged()
         .Subscribe(fun x -> value.OnNext x)
-    |> disposables.Add
+    |> disposable.Add
 
     value
         .DistinctUntilChanged()
@@ -79,10 +79,10 @@ let bindingInt64Box
             if not textbox.IsFocused then
                 textbox.Text <- text
         )
-    |> disposables.Add
+    |> disposable.Add
 
 let bindingTextBox
-    (disposables: CompositeDisposable)
+    (disposable: CompositeDisposable)
     (value: BehaviorSubject<string>)
     (textbox: TextBox)
     =
@@ -90,7 +90,7 @@ let bindingTextBox
         .Select(fun _ -> textbox.Text)
         .DistinctUntilChanged()
         .Subscribe(fun x -> value.OnNext x)
-    |> disposables.Add
+    |> disposable.Add
 
     value
         .DistinctUntilChanged()
@@ -98,11 +98,11 @@ let bindingTextBox
             if not textbox.IsFocused then
                 textbox.Text <- text
         )
-    |> disposables.Add
+    |> disposable.Add
 
 /// 绑定到索引，因为Item和Value过于复杂可以从外部数组查询中解耦。
 let bindingComboBox
-    (disposables: CompositeDisposable)
+    (disposable: CompositeDisposable)
     (index: BehaviorSubject<int>)
     (comboBox: ComboBox)
     =
@@ -111,7 +111,7 @@ let bindingComboBox
         .Select(fun _ -> comboBox.SelectedIndex)
         .DistinctUntilChanged()
         .Subscribe(fun i -> index.OnNext i)
-    |> disposables.Add
+    |> disposable.Add
 
     index
         .DistinctUntilChanged()
@@ -125,11 +125,11 @@ let bindingComboBox
             elif i = -1 && comboBox.SelectedIndex <> -1 then
                 comboBox.SelectedIndex <- -1
         )
-    |> disposables.Add
+    |> disposable.Add
 
 // 通用实现
-let private bindingToggleButton
-    (disposables: CompositeDisposable)
+let bindingToggleButton
+    (disposable: CompositeDisposable)
     (value: BehaviorSubject<bool>)
     (control: #System.Windows.Controls.Primitives.ToggleButton)
     =
@@ -137,7 +137,7 @@ let private bindingToggleButton
     let c = (control.Checked :?> IObservable<_>).Select(fun _ -> true)
     let u = (control.Unchecked :?> IObservable<_>).Select(fun _ -> false)
     c.Merge(u).Subscribe(fun ck -> value.OnNext ck)
-    |> disposables.Add
+    |> disposable.Add
 
     value
         .DistinctUntilChanged()
@@ -148,24 +148,24 @@ let private bindingToggleButton
             then
                 control.IsChecked <- Nullable(x)
         )
-    |> disposables.Add
+    |> disposable.Add
 
 let bindingCheckBox
-    (disposables: CompositeDisposable)
+    (disposable: CompositeDisposable)
     (value: BehaviorSubject<bool>)
     (checkbox: CheckBox)
     =
-    bindingToggleButton disposables value checkbox
+    bindingToggleButton disposable value checkbox
 
 let bindingRadioButton
-    (disposables: CompositeDisposable)
+    (disposable: CompositeDisposable)
     (value: BehaviorSubject<bool>)
     (radioButton: RadioButton)
     =
-    bindingToggleButton disposables value radioButton
+    bindingToggleButton disposable value radioButton
 
 let bindingRun
-    (disposables: CompositeDisposable)
+    (disposable: CompositeDisposable)
     (run: Run)
     (data: IObservable<'t>)
     =
@@ -176,11 +176,11 @@ let bindingRun
             (fun s -> run.Text <- s),
             (fun (ex: exn) -> run.Text <- ex.Message)
         )
-    |> disposables.Add
+    |> disposable.Add
 
 /// 绑定到Item
 let bindingComboBoxItem
-    (disposables: CompositeDisposable)
+    (disposable: CompositeDisposable)
     (item: BehaviorSubject<'t>)
     (comboBox: ComboBox)
     =
@@ -195,7 +195,7 @@ let bindingComboBoxItem
         .Select(Option.get)
         .DistinctUntilChanged()
         .Subscribe(fun i -> item.OnNext i)
-    |> disposables.Add
+    |> disposable.Add
 
     item
         .DistinctUntilChanged()
@@ -208,7 +208,7 @@ let bindingComboBoxItem
             if currentValue <> newValue then
                 comboBox.SelectedItem <- newValue
         )
-    |> disposables.Add
+    |> disposable.Add
 
 let bindingRadioButtonGroup
     (disposable: CompositeDisposable)

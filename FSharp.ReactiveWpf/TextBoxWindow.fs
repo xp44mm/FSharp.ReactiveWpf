@@ -20,7 +20,7 @@ let getFloat (initialValue: float) =
     let disposable = new CompositeDisposable()
 
     let innerValue = new BehaviorSubject<float>(initialValue)
-    Binding.bindingNumberBox disposable innerValue textbox
+    WpfSubscriber.bindingNumberBox disposable innerValue textbox
 
     (cancel.Click :?> IObservable<_>).Subscribe(fun _ -> window.DialogResult <- Nullable(false))
     |> disposable.Add
@@ -50,7 +50,7 @@ let getInt64 (initialValue: int64) =
     let disposable = new CompositeDisposable()
 
     let innerValue = new BehaviorSubject<int64>(initialValue)
-    Binding.bindingInt64Box disposable innerValue textbox
+    WpfSubscriber.bindingInt64Box disposable innerValue textbox
 
     (cancel.Click :?> IObservable<_>).Subscribe(fun _ -> window.DialogResult <- Nullable(false))
     |> disposable.Add
@@ -81,7 +81,7 @@ let getInt (initialValue: int) =
     let disposable = new CompositeDisposable()
 
     let innerValue = new BehaviorSubject<int>(initialValue)
-    Binding.bindingIntegerBox disposable innerValue textbox
+    WpfSubscriber.bindingIntegerBox disposable innerValue textbox
 
     (cancel.Click :?> IObservable<_>).Subscribe(fun _ -> window.DialogResult <- Nullable(false))
     |> disposable.Add
