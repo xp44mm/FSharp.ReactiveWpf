@@ -164,18 +164,11 @@ let bindingRadioButton
     =
     bindingToggleButton disposable value radioButton
 
-let bindingRun
-    (disposable: CompositeDisposable)
-    (run: Run)
-    (data: IObservable<'t>)
-    =
+let bindingRun (disposable: CompositeDisposable) (run: Run) (data: IObservable<'t>) =
     data
         .DistinctUntilChanged()
         .Select(sprintf "%A")
-        .Subscribe(
-            (fun s -> run.Text <- s),
-            (fun (ex: exn) -> run.Text <- ex.Message)
-        )
+        .Subscribe((fun s -> run.Text <- s), (fun (ex: exn) -> run.Text <- ex.Message))
     |> disposable.Add
 
 /// 绑定到Item
@@ -218,9 +211,7 @@ let bindingRadioButtonGroup
 
     let radioObservable =
         radioButtons
-        |> Array.mapi(fun i radio ->
-            (radio.Checked :?> IObservable<_>).Select(fun _ -> i)
-        )
+        |> Array.mapi(fun i radio -> (radio.Checked :?> IObservable<_>).Select(fun _ -> i))
         |> Observable.Merge
 
     radioObservable.Subscribe(value) |> disposable.Add
@@ -228,8 +219,15 @@ let bindingRadioButtonGroup
     value
         .DistinctUntilChanged()
         .Subscribe(fun i ->
-            let radio = radioButtons.[i]
-            if radio.IsChecked <> Nullable(true) then
-                radio.IsChecked <- Nullable(true)
+            if i >= 0 && i < radioButtons.Length then
+                let radio = radioButtons.[i]
+                if radio.IsChecked <> Nullable(true) then
+                    radio.IsChecked <- Nullable(true)
+            else
+                radioButtons
+                |> Array.iter(fun radio ->
+                    if radio.IsChecked <> Nullable(false) then
+                        radio.IsChecked <- Nullable(false)
+                )
         )
-    |> ignore
+    |> disposable.Add
