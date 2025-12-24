@@ -9,8 +9,9 @@ open System.Reactive.Disposables
 open System.Reactive.Linq
 open MahApps.Metro.Controls
 
-let getFloat (initialValue: float) =
-    let assy = Assembly.GetExecutingAssembly()
+let assy = Assembly.GetExecutingAssembly()
+
+let private main (initialValue: 't) binder =
     let window =
         XamlLoader.loadXaml assy "FSharp.ReactiveWpf.TextBoxWindow.xaml" :?> MetroWindow
     let textbox = window.FindName("textbox") :?> TextBox
@@ -19,84 +20,40 @@ let getFloat (initialValue: float) =
 
     let disposable = new CompositeDisposable()
 
-    let innerValue = new BehaviorSubject<float>(initialValue)
-    WpfSubscriber.bindingNumberBox disposable innerValue textbox
+    let value = new BehaviorSubject<'t>(initialValue)
+    let mutable output = initialValue
 
-    (cancel.Click :?> IObservable<_>).Subscribe(fun _ -> window.DialogResult <- Nullable(false))
-    |> disposable.Add
-    let mutable output = 0.0
+    //仅有的不同部分
+    binder disposable textbox value
+
     (confirm.Click :?> IObservable<_>)
-        .WithLatestFrom(innerValue)
+        .WithLatestFrom(value)
         .Subscribe(fun struct (_, v) ->
             output <- v
             window.DialogResult <- Nullable(true)
         )
     |> disposable.Add
 
+    (cancel.Click :?> IObservable<_>).Subscribe(fun _ -> window.DialogResult <- Nullable(false))
+    |> disposable.Add
+
     window.Closed.Add(fun _ ->
         disposable.Dispose()
-        innerValue.Dispose()
+        value.Dispose()
     )
     window, fun () -> output
+
+let getFloat (initialValue: float) =
+    let binder disposable textbox textValue =
+        WpfSubscriber.bindingNumberBox disposable textValue textbox
+    main initialValue binder
 
 let getInt64 (initialValue: int64) =
-    let assy = Assembly.GetExecutingAssembly()
-    let window =
-        XamlLoader.loadXaml assy "FSharp.ReactiveWpf.TextBoxWindow.xaml" :?> MetroWindow
-    let textbox = window.FindName("textbox") :?> TextBox
-    let confirm = window.FindName("confirm") :?> Button
-    let cancel = window.FindName("cancel") :?> Button
-
-    let disposable = new CompositeDisposable()
-
-    let innerValue = new BehaviorSubject<int64>(initialValue)
-    WpfSubscriber.bindingInt64Box disposable innerValue textbox
-
-    (cancel.Click :?> IObservable<_>).Subscribe(fun _ -> window.DialogResult <- Nullable(false))
-    |> disposable.Add
-
-    let mutable output = 0L
-    (confirm.Click :?> IObservable<_>)
-        .WithLatestFrom(innerValue)
-        .Subscribe(fun struct (_, v) ->
-            output <- v
-            window.DialogResult <- Nullable(true)
-        )
-    |> disposable.Add
-
-    window.Closed.Add(fun _ ->
-        disposable.Dispose()
-        innerValue.Dispose()
-    )
-    window, fun () -> output
+    let binder disposable textbox textValue =
+        WpfSubscriber.bindingInt64Box disposable textValue textbox
+    main initialValue binder
 
 let getInt (initialValue: int) =
-    let assy = Assembly.GetExecutingAssembly()
-    let window =
-        XamlLoader.loadXaml assy "FSharp.ReactiveWpf.TextBoxWindow.xaml" :?> MetroWindow
-    let textbox = window.FindName("textbox") :?> TextBox
-    let confirm = window.FindName("confirm") :?> Button
-    let cancel = window.FindName("cancel") :?> Button
-
-    let disposable = new CompositeDisposable()
-
-    let innerValue = new BehaviorSubject<int>(initialValue)
-    WpfSubscriber.bindingIntegerBox disposable innerValue textbox
-
-    (cancel.Click :?> IObservable<_>).Subscribe(fun _ -> window.DialogResult <- Nullable(false))
-    |> disposable.Add
-
-    let mutable output = 0
-    (confirm.Click :?> IObservable<_>)
-        .WithLatestFrom(innerValue)
-        .Subscribe(fun struct (_, v) ->
-            output <- v
-            window.DialogResult <- Nullable(true)
-        )
-    |> disposable.Add
-
-    window.Closed.Add(fun _ ->
-        disposable.Dispose()
-        innerValue.Dispose()
-    )
-    window, fun () -> output
+    let binder disposable textbox textValue =
+        WpfSubscriber.bindingIntegerBox disposable textValue textbox
+    main initialValue binder

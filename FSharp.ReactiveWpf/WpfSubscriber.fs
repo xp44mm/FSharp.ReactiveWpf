@@ -8,13 +8,14 @@ open System.Reactive.Disposables
 open System.Windows.Controls
 open System.Windows.Documents
 open FSharp.Idioms
+open System.Diagnostics
 
 //一个双向绑定的文本输入框，专门用于处理浮点数输入。主要功能是：
 //将文本框的文本内容转换为浮点数
 //将浮点数更新同步回文本框
 let bindingNumberBox
     (disposable: CompositeDisposable)
-    (value: BehaviorSubject<float>)
+    (value: ISubject<float>)
     (textbox: TextBox)
     =
     (textbox.LostFocus :?> IObservable<_>)
@@ -23,7 +24,7 @@ let bindingNumberBox
         .Where(Option.isSome)
         .Select(Option.get)
         .DistinctUntilChanged()
-        .Subscribe(fun x -> value.OnNext x)
+        .Subscribe(value)
     |> disposable.Add
 
     value
@@ -37,7 +38,7 @@ let bindingNumberBox
 
 let bindingIntegerBox
     (disposable: CompositeDisposable)
-    (value: BehaviorSubject<int>)
+    (value: ISubject<int>)
     (textbox: TextBox)
     =
     (textbox.LostFocus :?> IObservable<_>)
@@ -46,7 +47,7 @@ let bindingIntegerBox
         .Where(Option.isSome)
         .Select(Option.get)
         .DistinctUntilChanged()
-        .Subscribe(fun x -> value.OnNext x)
+        .Subscribe(value)
     |> disposable.Add
 
     value
@@ -60,7 +61,7 @@ let bindingIntegerBox
 
 let bindingInt64Box
     (disposable: CompositeDisposable)
-    (value: BehaviorSubject<int64>)
+    (value: ISubject<int64>)
     (textbox: TextBox)
     =
     (textbox.LostFocus :?> IObservable<_>)
@@ -69,7 +70,7 @@ let bindingInt64Box
         .Where(Option.isSome)
         .Select(Option.get)
         .DistinctUntilChanged()
-        .Subscribe(fun x -> value.OnNext x)
+        .Subscribe(value)
     |> disposable.Add
 
     value
@@ -81,36 +82,40 @@ let bindingInt64Box
         )
     |> disposable.Add
 
+let bindingReadOnlyTextBox
+    (disposable: CompositeDisposable)
+    (value: IObservable<string>)
+    (textbox: TextBox)
+    =
+    value
+        .DistinctUntilChanged()
+        .Subscribe(fun text -> textbox.Text <- text)
+    |> disposable.Add
+
 let bindingTextBox
     (disposable: CompositeDisposable)
-    (value: BehaviorSubject<string>)
+    (value: ISubject<string>)
     (textbox: TextBox)
     =
     (textbox.LostFocus :?> IObservable<_>)
         .Select(fun _ -> textbox.Text)
         .DistinctUntilChanged()
-        .Subscribe(fun x -> value.OnNext x)
+        .Subscribe(value)
     |> disposable.Add
 
-    value
-        .DistinctUntilChanged()
-        .Subscribe(fun text ->
-            if not textbox.IsFocused then
-                textbox.Text <- text
-        )
-    |> disposable.Add
+    bindingReadOnlyTextBox disposable value textbox
 
 /// 绑定到索引，因为Item和Value过于复杂可以从外部数组查询中解耦。
 let bindingComboBox
     (disposable: CompositeDisposable)
-    (index: BehaviorSubject<int>)
+    (index: ISubject<int>)
     (comboBox: ComboBox)
     =
 
     (comboBox.SelectionChanged :?> IObservable<_>)
         .Select(fun _ -> comboBox.SelectedIndex)
         .DistinctUntilChanged()
-        .Subscribe(fun i -> index.OnNext i)
+        .Subscribe(index)
     |> disposable.Add
 
     index
@@ -130,13 +135,13 @@ let bindingComboBox
 // 通用实现
 let bindingToggleButton
     (disposable: CompositeDisposable)
-    (value: BehaviorSubject<bool>)
+    (value: ISubject<bool>)
     (control: #System.Windows.Controls.Primitives.ToggleButton)
     =
     control.IsThreeState <- false
     let c = (control.Checked :?> IObservable<_>).Select(fun _ -> true)
     let u = (control.Unchecked :?> IObservable<_>).Select(fun _ -> false)
-    c.Merge(u).Subscribe(fun ck -> value.OnNext ck)
+    c.Merge(u).Subscribe(value)
     |> disposable.Add
 
     value
@@ -152,14 +157,14 @@ let bindingToggleButton
 
 let bindingCheckBox
     (disposable: CompositeDisposable)
-    (value: BehaviorSubject<bool>)
+    (value: ISubject<bool>)
     (checkbox: CheckBox)
     =
     bindingToggleButton disposable value checkbox
 
 let bindingRadioButton
     (disposable: CompositeDisposable)
-    (value: BehaviorSubject<bool>)
+    (value: ISubject<bool>)
     (radioButton: RadioButton)
     =
     bindingToggleButton disposable value radioButton
@@ -174,7 +179,7 @@ let bindingRun (disposable: CompositeDisposable) (run: Run) (data: IObservable<'
 /// 绑定到Item
 let bindingComboBoxItem
     (disposable: CompositeDisposable)
-    (item: BehaviorSubject<'t>)
+    (item: ISubject<'t>)
     (comboBox: ComboBox)
     =
 
@@ -187,7 +192,7 @@ let bindingComboBoxItem
         .Where(Option.isSome)
         .Select(Option.get)
         .DistinctUntilChanged()
-        .Subscribe(fun i -> item.OnNext i)
+        .Subscribe(item)
     |> disposable.Add
 
     item
@@ -205,7 +210,7 @@ let bindingComboBoxItem
 
 let bindingRadioButtonGroup
     (disposable: CompositeDisposable)
-    (value: BehaviorSubject<int>)
+    (value: ISubject<int>)
     (radioButtons: RadioButton[])
     =
 
@@ -229,5 +234,44 @@ let bindingRadioButtonGroup
                     if radio.IsChecked <> Nullable(false) then
                         radio.IsChecked <- Nullable(false)
                 )
+        )
+    |> disposable.Add
+
+let bindingRadioButtonGroupUsingContent
+    (disposable: CompositeDisposable)
+    (content: ISubject<string>)
+    (radioButtons: RadioButton[])
+    =
+
+    //for radio in radioButtons do
+    //    if radio.Content = null then
+    //        failwith "All RadioButtons must have a Content value"
+
+    let radioObservable =
+        radioButtons
+        |> Array.map(fun radio ->
+            (radio.Checked :?> IObservable<_>).Select(fun _ -> 
+                
+                radio.Content :?> string).Do(fun s -> Debug.WriteLine s)
+        )
+        |> Observable.Merge
+
+    radioObservable.Subscribe(content)
+    |> disposable.Add
+
+    content
+        .DistinctUntilChanged()
+        .Subscribe(fun sc ->
+            match
+                radioButtons
+                |> Array.tryFind(fun radio ->
+                    let c = radio.Content :?> string
+                    sc = c
+                )
+            with
+            | Some radio ->
+                if radio.IsChecked <> Nullable(true) then
+                    radio.IsChecked <- Nullable(true)
+            | None -> ()
         )
     |> disposable.Add
