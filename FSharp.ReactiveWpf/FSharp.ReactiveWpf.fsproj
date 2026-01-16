@@ -44,13 +44,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.Idioms" Version="1.5.4" />
+		<PackageReference Include="FSharp.Idioms" Version="1.5.5" />
 		<PackageReference Include="MahApps.Metro" Version="2.4.11" />
 		<PackageReference Include="System.Reactive" Version="6.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="FSharp.Core" Version="10.0.101" />
+	  <PackageReference Update="FSharp.Core" Version="10.0.102" />
 	</ItemGroup>
 
 </Project>
