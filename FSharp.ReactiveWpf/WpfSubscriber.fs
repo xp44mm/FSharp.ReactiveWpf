@@ -9,6 +9,7 @@ open System.Windows.Controls
 open System.Windows.Documents
 open FSharp.Idioms
 open System.Diagnostics
+open System.Threading
 
 //一个双向绑定的文本输入框，专门用于处理浮点数输入。主要功能是：
 //将文本框的文本内容转换为浮点数
@@ -30,6 +31,7 @@ let bindingNumberBox
     value
         .DistinctUntilChanged()
         .Select(fun f -> f.ToString())
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun text ->
             if not textbox.IsFocused then
                 textbox.Text <- text
@@ -53,6 +55,7 @@ let bindingIntegerBox
     value
         .DistinctUntilChanged()
         .Select(fun f -> f.ToString())
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun text ->
             if not textbox.IsFocused then
                 textbox.Text <- text
@@ -76,6 +79,7 @@ let bindingInt64Box
     value
         .DistinctUntilChanged()
         .Select(fun f -> f.ToString())
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun text ->
             if not textbox.IsFocused then
                 textbox.Text <- text
@@ -89,6 +93,7 @@ let bindingReadOnlyTextBox
     =
     value
         .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun text -> textbox.Text <- text)
     |> disposable.Add
 
@@ -120,6 +125,7 @@ let bindingComboBox
 
     index
         .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun i ->
             if
                 i >= 0
@@ -146,6 +152,7 @@ let bindingToggleButton
 
     value
         .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun x ->
             if
                 control.IsChecked.HasValue
@@ -173,6 +180,7 @@ let bindingRun (disposable: CompositeDisposable) (run: Run) (data: IObservable<'
     data
         .DistinctUntilChanged()
         .Select(sprintf "%A")
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe((fun s -> run.Text <- s), (fun (ex: exn) -> run.Text <- ex.Message))
     |> disposable.Add
 
@@ -197,6 +205,7 @@ let bindingComboBoxItem
 
     item
         .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun newValue ->
             let currentValue =
                 match comboBox.SelectedItem with
@@ -223,6 +232,7 @@ let bindingRadioButtonGroup
 
     value
         .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun i ->
             if i >= 0 && i < radioButtons.Length then
                 let radio = radioButtons.[i]
@@ -243,10 +253,6 @@ let bindingRadioButtonGroupUsingContent
     (radioButtons: RadioButton[])
     =
 
-    //for radio in radioButtons do
-    //    if radio.Content = null then
-    //        failwith "All RadioButtons must have a Content value"
-
     let radioObservable =
         radioButtons
         |> Array.map(fun radio ->
@@ -261,6 +267,7 @@ let bindingRadioButtonGroupUsingContent
 
     content
         .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun sc ->
             match
                 radioButtons

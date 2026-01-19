@@ -1,0 +1,24 @@
+﻿<DockPanel
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+    VerticalAlignment="Center"
+    LastChildFill="True">
+    <Border
+        x:Name="name"
+        Width="120"
+        Padding="5"
+        DockPanel.Dock="Left" />
+    <Border
+        x:Name="measure"
+        Width="80"
+        Padding="5"
+        DockPanel.Dock="Left" />
+    <Border
+        x:Name="value"
+        Width="240"
+        Padding="5"
+        DockPanel.Dock="Left" />
+    <Border x:Name="spec" Padding="5" />
+</DockPanel>
+

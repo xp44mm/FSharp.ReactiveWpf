@@ -9,11 +9,11 @@ open System.Reactive.Disposables
 open System.Reactive.Linq
 open MahApps.Metro.Controls
 
-let assy = Assembly.GetExecutingAssembly()
+//let assy = Assembly.GetExecutingAssembly()
 
 let private main (initialValue: 't) binder =
     let window =
-        XamlLoader.loadXaml assy "FSharp.ReactiveWpf.TextBoxWindow.xaml" :?> MetroWindow
+        App.loadXaml "TextBoxWindow.xaml" :?> MetroWindow
     let textbox = window.FindName("textbox") :?> TextBox
     let confirm = window.FindName("confirm") :?> Button
     let cancel = window.FindName("cancel") :?> Button
