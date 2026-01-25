@@ -110,7 +110,7 @@ let bindingTextBox
 
     bindingReadOnlyTextBox disposable value textbox
 
-/// 绑定到索引，因为Item和Value过于复杂可以从外部数组查询中解耦。
+/// 绑定到索引，因为Item和Value过于复杂可以从外部数组查询中解耦
 let bindingComboBox
     (disposable: CompositeDisposable)
     (index: ISubject<int>)

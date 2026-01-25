@@ -32,10 +32,12 @@
 		<EmbeddedResource Include="Row.xaml" />
 		<EmbeddedResource Include="TextBoxWindow.xaml" />
 		<Compile Include="XamlLoader.fs" />
-		<Compile Include="App.fs" />
+		<Compile Include="Internal.fs" />
 		<Compile Include="Row.fs" />
 		<Compile Include="WpfSubscriber.fs" />
 		<Compile Include="View.fs" />
+		<Compile Include="ComboBox.fs" />
+		<Compile Include="NumberBox.fs" />
 		<Compile Include="TextBoxWindow.fs" />
 		<Compile Include="MediaPlayer.fs" />
 		<Compile Include="DependencyObjectUtils.fs" />

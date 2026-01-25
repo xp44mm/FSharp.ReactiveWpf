@@ -6,7 +6,7 @@
     LastChildFill="True">
     <Border
         x:Name="name"
-        Width="120"
+        Width="150"
         Padding="5"
         DockPanel.Dock="Left" />
     <Border

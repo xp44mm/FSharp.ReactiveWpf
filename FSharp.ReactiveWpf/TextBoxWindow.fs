@@ -13,7 +13,7 @@ open MahApps.Metro.Controls
 
 let private main (initialValue: 't) binder =
     let window =
-        App.loadXaml "TextBoxWindow.xaml" :?> MetroWindow
+        Internal.loadXaml "TextBoxWindow.xaml" :?> MetroWindow
     let textbox = window.FindName("textbox") :?> TextBox
     let confirm = window.FindName("confirm") :?> Button
     let cancel = window.FindName("cancel") :?> Button

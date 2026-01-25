@@ -12,7 +12,7 @@ type Row = {
 } with
 
     static member empty() =
-        let panel = App.loadXaml "Row.xaml" :?> DockPanel
+        let panel = Internal.loadXaml "Row.xaml" :?> DockPanel
         {
             Root = panel
             Name = panel.FindName("name") :?> Border

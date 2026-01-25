@@ -1,4 +1,4 @@
-module FSharp.ReactiveWpf.App
+module FSharp.ReactiveWpf.Internal
 
 open System
 open System.Windows

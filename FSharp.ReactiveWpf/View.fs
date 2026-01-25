@@ -9,11 +9,25 @@ open System.Reactive.Linq
 open System.Threading
 
 open FSharp.Idioms
+open System.Reactive.Disposables
+
+let formatValue (value: 't) =
+    match box value with
+    | :? float as f -> sprintf "%.2f" f
+    | :? float32 as f32 -> sprintf "%.2f" f32
+    | :? int as i -> string i
+    | :? int64 as i64 -> string i64
+    | :? decimal as d -> sprintf "%.2M" d
+    | :? DateTime as dt -> dt.ToString("yyyy-MM-dd HH:mm:ss")
+    | :? bool as b -> if b then "是" else "否"
+    | :? string as s -> s
+    | null -> ""
+    | _ -> sprintf "%A" value
 
 let textBlock (ob: IObservable<'t>) =
     let tb = TextBlock()
     let sub =
-        ob.ObserveOn(SynchronizationContext.Current).Subscribe(fun s -> tb.Text <- sprintf "%A" s)
+        ob.ObserveOn(SynchronizationContext.Current).Subscribe(fun s -> tb.Text <- formatValue s)
     tb.Unloaded.Add(fun _ -> sub.Dispose())
     tb
 
@@ -61,3 +75,11 @@ let checkBox (value: ISubject<bool>) =
         sub2.Dispose()
     )
     cb
+
+/// 
+let comboBox (index: ISubject<int>) =
+    let comboBox = ComboBox()
+    let disposable = new CompositeDisposable()
+    WpfSubscriber.bindingComboBox disposable index comboBox
+    comboBox.Unloaded.Add(fun _ -> disposable.Dispose())
+    comboBox
