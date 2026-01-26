@@ -1,4 +1,5 @@
-﻿module FSharp.ReactiveWpf.View
+﻿[<System.Obsolete("使用各具体控件模块")>]
+module FSharp.ReactiveWpf.View
 
 open System
 open System.Windows.Controls
@@ -10,29 +11,19 @@ open System.Threading
 
 open FSharp.Idioms
 open System.Reactive.Disposables
+open FSharp.Idioms.Literal
 
-let formatValue (value: 't) =
-    match box value with
-    | :? float as f -> sprintf "%.2f" f
-    | :? float32 as f32 -> sprintf "%.2f" f32
-    | :? int as i -> string i
-    | :? int64 as i64 -> string i64
-    | :? decimal as d -> sprintf "%.2M" d
-    | :? DateTime as dt -> dt.ToString("yyyy-MM-dd HH:mm:ss")
-    | :? bool as b -> if b then "是" else "否"
-    | :? string as s -> s
-    | null -> ""
-    | _ -> sprintf "%A" value
 
 let textBlock (ob: IObservable<'t>) =
     let tb = TextBlock()
     let sub =
-        ob.ObserveOn(SynchronizationContext.Current).Subscribe(fun s -> tb.Text <- formatValue s)
+        ob.ObserveOn(SynchronizationContext.Current).Subscribe(fun s -> tb.Text <- stringify s)
     tb.Unloaded.Add(fun _ -> sub.Dispose())
     tb
 
 let numberBox (value: ISubject<float>) =
     let textbox = TextBox()
+
     let sub1 =
         (textbox.LostFocus :?> IObservable<_>)
             .Select(fun _ -> textbox.Text)
@@ -41,6 +32,7 @@ let numberBox (value: ISubject<float>) =
             .Select(Option.get)
             .DistinctUntilChanged()
             .Subscribe(value)
+
     let sub2 =
         value
             .DistinctUntilChanged()
@@ -50,10 +42,12 @@ let numberBox (value: ISubject<float>) =
                 if not textbox.IsFocused then
                     textbox.Text <- text
             )
+
     textbox.Unloaded.Add(fun _ ->
         sub1.Dispose()
         sub2.Dispose()
     )
+
     textbox
 
 let checkBox (value: ISubject<bool>) =
@@ -80,6 +74,6 @@ let checkBox (value: ISubject<bool>) =
 let comboBox (index: ISubject<int>) =
     let comboBox = ComboBox()
     let disposable = new CompositeDisposable()
-    WpfSubscriber.bindingComboBox disposable index comboBox
+    ComboBox.bindIndex disposable index comboBox
     comboBox.Unloaded.Add(fun _ -> disposable.Dispose())
     comboBox

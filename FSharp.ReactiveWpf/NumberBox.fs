@@ -12,7 +12,7 @@ open System.Threading
 //一个双向绑定的文本输入框，专门用于处理浮点数输入。主要功能是：
 //将文本框的文本内容转换为浮点数
 //将浮点数更新同步回文本框
-let bindingNumberBox
+let bind
     (disposable: CompositeDisposable)
     (value: ISubject<float>)
     (textbox: TextBox)
@@ -35,3 +35,14 @@ let bindingNumberBox
                 textbox.Text <- text
         )
     |> disposable.Add
+
+let create (value: ISubject<float>) =
+    let textbox = TextBox()
+    let disposable = new CompositeDisposable()
+
+    bind disposable value textbox
+
+    textbox.Unloaded.Add(fun _ ->
+        disposable.Dispose()
+    )
+    textbox

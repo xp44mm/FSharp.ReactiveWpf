@@ -19,17 +19,17 @@ let boolValue = new BehaviorSubject<bool>(false)
 let disposables = new CompositeDisposable()
 
 // 绑定文本框（浮点数）
-bindingNumberBox disposables numberValue myTextBox
+NumberBox.bind disposables numberValue myTextBox
 
 // 绑定文本框（字符串）
-bindingTextBox disposables textValue myStringTextBox
+TextBox.bind disposables textValue myStringTextBox
 
 // 绑定复选框
-bindingCheckBox disposables boolValue myCheckBox
+CheckBox.bind disposables boolValue myCheckBox
 
 // 绑定单选按钮组
 let radioButtons = [| radio1; radio2; radio3 |]
-bindingRadioButtonGroup disposables selectedIndex radioButtons
+RadioButton.bindingRadioButtonGroup disposables selectedIndex radioButtons
 ```
 
 ### 数字输入对话框
@@ -57,82 +57,28 @@ if window.ShowDialog() = Nullable true then
 ### 绑定函数
 
 #### 文本框绑定
-- `bindingNumberBox` - 浮点数文本框
-- `bindingIntegerBox` - 整数文本框  
-- `bindingInt64Box` - 64位整数文本框
-- `bindingTextBox` - 字符串文本框
+- `NumberBox.bind` - 浮点数文本框
+- `TextBox.bindingIntegerBox` - 整数文本框  
+- `TextBox.bindingInt64Box` - 64位整数文本框
+- `TextBox.bindingTextBox` - 字符串文本框
 
 #### 选择控件绑定
-- `bindingComboBox` - 组合框（索引绑定）
-- `bindingComboBoxItem` - 组合框（项绑定）
-- `bindingRadioButtonGroup` - 单选按钮组
+- `ComboBox.bindIndex` - 组合框（索引绑定）
+- `ComboBox.bindItem` - 组合框（项绑定）
+- `RadioButton.bindingRadioButtonGroup` - 单选按钮组
 
 #### 切换控件绑定
-- `bindingCheckBox` - 复选框
-- `bindingRadioButton` - 单选按钮
+- `CheckBox.bind` - 复选框
+- `RadioButton.bindingRadioButton` - 单选按钮
 
 #### 文本显示
-- `bindingRun` - Run 文本元素绑定
+- `Run.bind` - Run 文本元素绑定
 
 ### 对话框函数
 
-- `getFloat` - 获取浮点数输入
-- `getInt` - 获取整数输入  
-- `getInt64` - 获取64位整数输入
-
-### MediaPlayer.createPlaylistObservable
-
-## 完整示例
-
-```fsharp
-open System.Windows
-open FSharp.ReactiveWpf.Binding
-open System.Reactive.Subjects
-open System.Reactive.Disposables
-
-type MainWindow() as this =
-    inherit Window()
-    
-    let disposables = new CompositeDisposable()
-    
-    // 创建数据模型
-    let temperature = new BehaviorSubject<float>(20.0)
-    let name = new BehaviorSubject<string>("")
-    let isActive = new BehaviorSubject<bool>(true)
-    let selectedIndex = new BehaviorSubject<int>(0)
-    
-    do
-        // 初始化 UI 组件
-        this.InitializeComponent()
-        
-        // 绑定控件
-        bindingNumberBox disposables temperature this.temperatureTextBox
-        bindingTextBox disposables name this.nameTextBox  
-        bindingCheckBox disposables isActive this.activeCheckBox
-        bindingComboBox disposables selectedIndex this.categoryComboBox
-        
-    interface IDisposable with
-        member this.Dispose() = disposables.Dispose()
-```
-
-## 设计理念
-
-### 响应式编程
-库基于观察者模式，使用 `BehaviorSubject<T>` 作为数据源，确保数据流的实时性和一致性。
-
-### 资源管理
-使用 `CompositeDisposable` 统一管理订阅，避免内存泄漏。
-
-### 关注点分离
-UI 逻辑与业务逻辑清晰分离，便于测试和维护。
-
-## 贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-## 许可证
-
-GPLv3
+- `TextBoxWindow.getFloat` - 获取浮点数输入
+- `TextBoxWindow.getInt` - 获取整数输入  
+- `TextBoxWindow.getInt64` - 获取64位整数输入
 
 # MediaPlayer.createPlaylistObservable
 
@@ -183,4 +129,30 @@ playlistSubject.OnNext([|
 |])
 ```
 
+
+
+
+## 完整示例
+
+```fsharp
+```
+
+## 设计理念
+
+### 响应式编程
+库基于观察者模式，使用 `BehaviorSubject<T>` 作为数据源，确保数据流的实时性和一致性。
+
+### 资源管理
+使用 `CompositeDisposable` 统一管理订阅，避免内存泄漏。
+
+### 关注点分离
+UI 逻辑与业务逻辑清晰分离，便于测试和维护。
+
+## 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 许可证
+
+GPLv3
 

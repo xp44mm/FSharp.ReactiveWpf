@@ -45,15 +45,15 @@ let private main (initialValue: 't) binder =
 
 let getFloat (initialValue: float) =
     let binder disposable textbox textValue =
-        WpfSubscriber.bindingNumberBox disposable textValue textbox
+        NumberBox.bind disposable textValue textbox
     main initialValue binder
 
 let getInt64 (initialValue: int64) =
     let binder disposable textbox textValue =
-        WpfSubscriber.bindingInt64Box disposable textValue textbox
+        TextBox.bindingInt64Box disposable textValue textbox
     main initialValue binder
 
 let getInt (initialValue: int) =
     let binder disposable textbox textValue =
-        WpfSubscriber.bindingIntegerBox disposable textValue textbox
+        TextBox.bindingIntegerBox disposable textValue textbox
     main initialValue binder

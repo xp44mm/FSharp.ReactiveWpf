@@ -1,4 +1,5 @@
-﻿module FSharp.ReactiveWpf.WpfSubscriber
+﻿[<System.Obsolete("使用各具体控件模块")>]
+module FSharp.ReactiveWpf.WpfSubscriber
 
 open System
 open System.Reactive.Linq
