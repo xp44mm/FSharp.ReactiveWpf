@@ -31,6 +31,7 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Row.xaml" />
 		<EmbeddedResource Include="TextBoxWindow.xaml" />
+		<Compile Include="ObservableArray.fs" />
 		<Compile Include="XamlLoader.fs" />
 		<Compile Include="Internal.fs" />
 		<Compile Include="TextBlock.fs" />
