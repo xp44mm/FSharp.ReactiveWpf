@@ -23,7 +23,8 @@ let demo() =
                     printfn "替换了项目 [%d]: %s -> %s" i oldItem newItem
                 | CollectionChange.Cleared ->
                     printfn "清空了数组"
-                | _ -> ())
+                //| _ -> ()
+                )
         
     // 执行操作
     array.Add("第一个项目")
