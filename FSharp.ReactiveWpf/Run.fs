@@ -16,11 +16,10 @@ let bind (disposable: CompositeDisposable) (data: IObservable<'t>) (run: Run) =
         .Subscribe((fun s -> run.Text <- s), (fun (ex: exn) -> run.Text <- ex.Message))
     |> disposable.Add
 
-let create (data: IObservable<'t>) =
-    let r = Run()
-    let disposable = new CompositeDisposable()
-    bind disposable data r
-    r.Unloaded.Add(fun _ -> disposable.Dispose())
-    r
+let create (disposable: CompositeDisposable) (data: IObservable<'t>) =
+    let rn = Run()
+    bind disposable data rn
+    rn.Unloaded.Add(fun _ -> disposable.Dispose())
+    rn
 
 

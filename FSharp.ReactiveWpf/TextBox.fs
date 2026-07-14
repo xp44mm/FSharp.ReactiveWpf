@@ -20,7 +20,17 @@ let bindingReadOnlyTextBox
         .Subscribe(fun text -> tb.Text <- text)
     |> disposable.Add
 
-let bindingTextBox
+let readOnlyTextBox (value: IObservable<string>) = 
+    let textbox = TextBox()
+    let disposable = new CompositeDisposable()
+    bindingReadOnlyTextBox disposable value textbox
+    textbox.Unloaded.Add(fun _ ->
+        disposable.Dispose()
+    )
+    textbox
+
+
+let bind
     (disposable: CompositeDisposable)
     (value: ISubject<string>)
     (textbox: TextBox)
@@ -31,22 +41,17 @@ let bindingTextBox
         .Subscribe(value)
     |> disposable.Add
 
-    bindingReadOnlyTextBox disposable value textbox
+    value
+        .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
+        .Subscribe(fun text -> textbox.Text <- text)
+    |> disposable.Add
 
-let readOnlyTextBox (value: IObservable<string>) = 
-    let textbox = TextBox()
-    let disposable = new CompositeDisposable()
-    bindingReadOnlyTextBox disposable value textbox
-    textbox.Unloaded.Add(fun _ ->
-        disposable.Dispose()
-    )
-    textbox
-
-let textBox (value: ISubject<string>) =
+let create (value: ISubject<string>) =
     let textbox = TextBox()
     let disposable = new CompositeDisposable()
 
-    bindingTextBox disposable value textbox
+    bind disposable value textbox
 
     textbox.Unloaded.Add(fun _ ->
         disposable.Dispose()

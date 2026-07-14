@@ -36,9 +36,8 @@ let bind
         )
     |> disposable.Add
 
-let create (value: ISubject<float>) =
+let create (disposable: CompositeDisposable) (value: ISubject<float>) =
     let textbox = TextBox()
-    let disposable = new CompositeDisposable()
 
     bind disposable value textbox
 
@@ -46,3 +45,7 @@ let create (value: ISubject<float>) =
         disposable.Dispose()
     )
     textbox
+
+let createLocal (value: ISubject<float>) =
+    let disposable = new CompositeDisposable()
+    create disposable value
