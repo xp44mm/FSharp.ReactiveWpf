@@ -16,13 +16,13 @@ let bind
     =
     ToggleButton.bind disposable value checkbox
 
-let checkBox (value: ISubject<bool>) =
-    let cb = CheckBox()
-    cb.IsThreeState <- false
+let create (disposable: CompositeDisposable) (value: ISubject<bool>) =
+    let check = CheckBox()
+    check.IsThreeState <- false
 
-    let disposable = new CompositeDisposable()
-    bind disposable value cb
-    cb.Unloaded.Add(fun _ ->
+    //let disposable = new CompositeDisposable()
+    bind disposable value check
+    check.Unloaded.Add(fun _ ->
         if disposable.IsDisposed then
             disposable.Dispose()
     )
@@ -43,4 +43,8 @@ let checkBox (value: ISubject<bool>) =
     //    sub2.Dispose()
     //)
 
-    cb
+    check
+
+let createLocal (value: ISubject<bool>) =
+    let disposable = new CompositeDisposable()
+    create disposable value

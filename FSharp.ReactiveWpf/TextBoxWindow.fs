@@ -55,5 +55,5 @@ let getInt64 (initialValue: int64) =
 
 let getInt (initialValue: int) =
     let binder disposable textbox textValue =
-        TextBox.bindingIntegerBox disposable textValue textbox
+        IntegerBox.bind disposable textValue textbox
     main initialValue binder
