@@ -16,35 +16,18 @@ let bind
     =
     ToggleButton.bind disposable value checkbox
 
-let create (disposable: CompositeDisposable) (value: ISubject<bool>) =
+let create (disposable: CompositeDisposable) (value: ISubject<bool>) (content: obj) =
     let check = CheckBox()
     check.IsThreeState <- false
-
-    //let disposable = new CompositeDisposable()
+    check.Content <- content
     bind disposable value check
-    check.Unloaded.Add(fun _ ->
-        if disposable.IsDisposed then
-            disposable.Dispose()
-    )
-
-    //let c = (cb.Checked :?> IObservable<_>).Select(fun _ -> true)
-    //let u = (cb.Unchecked :?> IObservable<_>).Select(fun _ -> false)
-    //let sub1 = c.Merge(u).Subscribe(value)
-    //let sub2 =
-    //    value
-    //        .DistinctUntilChanged()
-    //        .ObserveOn(SynchronizationContext.Current)
-    //        .Subscribe(fun x ->
-    //            if cb.IsChecked.HasValue && cb.IsChecked.Value <> x then
-    //                cb.IsChecked <- Nullable(x)
-    //        )
-    //cb.Unloaded.Add(fun _ ->
-    //    sub1.Dispose()
-    //    sub2.Dispose()
+    //check.Unloaded.Add(fun _ ->
+    //    if disposable.IsDisposed then
+    //        disposable.Dispose()
     //)
 
     check
 
-let createLocal (value: ISubject<bool>) =
+let createLocal (value: ISubject<bool>) (content: obj) =
     let disposable = new CompositeDisposable()
-    create disposable value
+    create disposable value content

@@ -17,7 +17,6 @@ let bind (disposable: CompositeDisposable) (data: IObservable<'t>) (tb: TextBloc
 
 let create (disposable: CompositeDisposable) (data: IObservable<'t>) =
     let tb = TextBlock()
-    //let disposable = new CompositeDisposable()
     bind disposable data tb
-    tb.Unloaded.Add(fun _ -> disposable.Dispose())
+    //tb.Unloaded.Add(fun _ -> disposable.Dispose())
     tb

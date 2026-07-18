@@ -32,7 +32,7 @@ let bind (disposable: CompositeDisposable) (value: ISubject<int>) (textbox: Text
 let create (disposable: CompositeDisposable) (value: ISubject<int>) =
     let textbox = TextBox()
     bind disposable value textbox
-    textbox.Unloaded.Add(fun _ -> disposable.Dispose())
+    //textbox.Unloaded.Add(fun _ -> disposable.Dispose())
     textbox
 
 let createLocal (value: ISubject<int>) =

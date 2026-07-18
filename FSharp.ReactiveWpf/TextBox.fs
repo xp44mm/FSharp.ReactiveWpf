@@ -24,9 +24,9 @@ let readOnlyTextBox (value: IObservable<string>) =
     let textbox = TextBox()
     let disposable = new CompositeDisposable()
     bindingReadOnlyTextBox disposable value textbox
-    textbox.Unloaded.Add(fun _ ->
-        disposable.Dispose()
-    )
+    //textbox.Unloaded.Add(fun _ ->
+    //    disposable.Dispose()
+    //)
     textbox
 
 let bind
@@ -52,9 +52,9 @@ let create (value: ISubject<string>) =
 
     bind disposable value textbox
 
-    textbox.Unloaded.Add(fun _ ->
-        disposable.Dispose()
-    )
+    //textbox.Unloaded.Add(fun _ ->
+    //    disposable.Dispose()
+    //)
     textbox
 
 let bindingInt64Box

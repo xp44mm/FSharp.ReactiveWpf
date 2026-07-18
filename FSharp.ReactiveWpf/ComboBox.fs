@@ -89,7 +89,7 @@ let comboBoxIndex
     let disposable = new CompositeDisposable()
     bindIndex disposable index comboBox
     
-    comboBox.Unloaded.Add(fun _ -> disposable.Dispose())
+    //comboBox.Unloaded.Add(fun _ -> disposable.Dispose())
     comboBox
 
 /// 创建带有预设项目列表并按项目值绑定的 ComboBox

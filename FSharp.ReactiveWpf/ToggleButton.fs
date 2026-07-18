@@ -41,8 +41,8 @@ let create (value: ISubject<bool>) =
     bind disposable value control
     
     // 添加清理逻辑
-    control.Unloaded.Add(fun _ -> 
-        if not disposable.IsDisposed then
-            disposable.Dispose())
+    //control.Unloaded.Add(fun _ -> 
+    //    if not disposable.IsDisposed then
+    //        disposable.Dispose())
     
     control

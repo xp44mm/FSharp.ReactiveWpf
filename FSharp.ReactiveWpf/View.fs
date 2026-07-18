@@ -13,12 +13,13 @@ open FSharp.Idioms
 open System.Reactive.Disposables
 open FSharp.Idioms.Literal
 
-
 let textBlock (ob: IObservable<'t>) =
     let tb = TextBlock()
-    let sub =
-        ob.ObserveOn(SynchronizationContext.Current).Subscribe(fun s -> tb.Text <- stringify s)
-    tb.Unloaded.Add(fun _ -> sub.Dispose())
+    //let sub =
+    ob.ObserveOn(SynchronizationContext.Current).Subscribe(fun s -> tb.Text <- stringify s)
+    |> ignore
+
+    //tb.Unloaded.Add(fun _ -> sub.Dispose())
     tb
 
 let numberBox (value: ISubject<float>) =
@@ -33,20 +34,21 @@ let numberBox (value: ISubject<float>) =
             .DistinctUntilChanged()
             .Subscribe(value)
 
-    let sub2 =
-        value
-            .DistinctUntilChanged()
-            .Select(fun f -> f.ToString())
-            .ObserveOn(SynchronizationContext.Current)
-            .Subscribe(fun text ->
-                if not textbox.IsFocused then
-                    textbox.Text <- text
-            )
+    //let sub2 =
+    value
+        .DistinctUntilChanged()
+        .Select(fun f -> f.ToString())
+        .ObserveOn(SynchronizationContext.Current)
+        .Subscribe(fun text ->
+            if not textbox.IsFocused then
+                textbox.Text <- text
+        )
+    |> ignore
 
-    textbox.Unloaded.Add(fun _ ->
-        sub1.Dispose()
-        sub2.Dispose()
-    )
+    //textbox.Unloaded.Add(fun _ ->
+    //    sub1.Dispose()
+    //    sub2.Dispose()
+    //)
 
     textbox
 
@@ -55,25 +57,32 @@ let checkBox (value: ISubject<bool>) =
     cb.IsThreeState <- false
     let c = (cb.Checked :?> IObservable<_>).Select(fun _ -> true)
     let u = (cb.Unchecked :?> IObservable<_>).Select(fun _ -> false)
-    let sub1 = c.Merge(u).Subscribe(value)
-    let sub2 =
-        value
-            .DistinctUntilChanged()
-            .ObserveOn(SynchronizationContext.Current)
-            .Subscribe(fun x ->
-                if cb.IsChecked.HasValue && cb.IsChecked.Value <> x then
-                    cb.IsChecked <- Nullable(x)
-            )
-    cb.Unloaded.Add(fun _ ->
-        sub1.Dispose()
-        sub2.Dispose()
-    )
+    //let sub1 = 
+    c.Merge(u).Subscribe(value)
+    |> ignore
+    //let sub2 =
+    value
+        .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
+        .Subscribe(fun x ->
+            if
+                cb.IsChecked.HasValue
+                && cb.IsChecked.Value <> x
+            then
+                cb.IsChecked <- Nullable(x)
+        )
+    |> ignore
+
+    //cb.Unloaded.Add(fun _ ->
+    //    sub1.Dispose()
+    //    sub2.Dispose()
+    //)
     cb
 
-/// 
+///
 let comboBox (index: ISubject<int>) =
     let comboBox = ComboBox()
     let disposable = new CompositeDisposable()
     ComboBox.bindIndex disposable index comboBox
-    comboBox.Unloaded.Add(fun _ -> disposable.Dispose())
+    //comboBox.Unloaded.Add(fun _ -> disposable.Dispose())
     comboBox

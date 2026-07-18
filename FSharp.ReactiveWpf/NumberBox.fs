@@ -41,9 +41,9 @@ let create (disposable: CompositeDisposable) (value: ISubject<float>) =
 
     bind disposable value textbox
 
-    textbox.Unloaded.Add(fun _ ->
-        disposable.Dispose()
-    )
+    //textbox.Unloaded.Add(fun _ ->
+    //    disposable.Dispose()
+    //)
     textbox
 
 let createLocal (value: ISubject<float>) =

@@ -19,7 +19,9 @@ let bind (disposable: CompositeDisposable) (data: IObservable<'t>) (run: Run) =
 let create (disposable: CompositeDisposable) (data: IObservable<'t>) =
     let rn = Run()
     bind disposable data rn
-    rn.Unloaded.Add(fun _ -> disposable.Dispose())
+    //rn.Unloaded.Add(fun _ -> disposable.Dispose())
     rn
 
-
+let createLocal (data: IObservable<'t>) =
+    let disposable = new CompositeDisposable()
+    create disposable data
