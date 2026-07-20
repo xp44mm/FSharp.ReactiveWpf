@@ -9,11 +9,7 @@ open System.Reactive.Linq
 open System.Threading
 open System.Reactive.Disposables
 
-// ============================================
-// 核心绑定函数
-// ============================================
-
-/// 绑定到索引（推荐使用，因为与外部数据源解耦）
+/// 绑定到索引
 let bindIndex
     (disposable: CompositeDisposable)
     (index: ISubject<int>)
@@ -72,12 +68,9 @@ let bindItem
         )
     |> disposable.Add
 
-// ============================================
-// 工厂函数（创建已绑定的 ComboBox）
-// ============================================
-
 /// 创建带有预设项目列表并按索引绑定的 ComboBox
-let comboBoxIndex 
+let createByIndex
+    (disposable: CompositeDisposable)
     (items: seq<string>) 
     (index: ISubject<int>)
     =
@@ -86,14 +79,14 @@ let comboBoxIndex
     for item in items do
         comboBox.Items.Add(item) |> ignore
 
-    let disposable = new CompositeDisposable()
     bindIndex disposable index comboBox
     
     //comboBox.Unloaded.Add(fun _ -> disposable.Dispose())
     comboBox
 
 /// 创建带有预设项目列表并按项目值绑定的 ComboBox
-let comboBoxItem 
+let createByItems 
+    (disposable: CompositeDisposable)
     (items: seq<string>) 
     (item: ISubject<string>)
     =
@@ -102,20 +95,7 @@ let comboBoxItem
     for itemText in items do
         comboBox.Items.Add(itemText) |> ignore
 
-    // 简化版绑定（不管理 disposable）
-    (comboBox.SelectionChanged :?> IObservable<_>)
-        .Select(fun _ -> comboBox.SelectedItem :?> string)
-        .DistinctUntilChanged()
-        .Subscribe(item)
-    |> ignore
-
-    item
-        .DistinctUntilChanged()
-        .ObserveOn(SynchronizationContext.Current)
-        .Subscribe(fun newValue -> 
-            comboBox.SelectedItem <- newValue
-        )
-    |> ignore
+    bindItem disposable item comboBox
 
     comboBox
 

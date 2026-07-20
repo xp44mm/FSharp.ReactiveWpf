@@ -11,14 +11,14 @@
 		<Title>一个用于 F# 和 WPF 的响应式数据绑定库，提供类型安全且函数式的 UI 绑定解决方案。</Title>
 		<Description>System.Reactive &amp; WPF 的响应式数据绑定，F#语言编写</Description>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
-		<PackageReleaseNotes>remove Unloaded</PackageReleaseNotes>
+		<PackageReleaseNotes>ComboBox</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Authors>xp44m</Authors>
 		<Company>34696643@qq.com</Company>
 		<Copyright>xp44mm</Copyright>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-		<Version>0.0.19</Version>
+		<Version>0.0.20</Version>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.ReactiveWpf</RepositoryUrl>
 		<PackageTags>fsharp;reactive;wpf;xaml</PackageTags>
 	</PropertyGroup>
@@ -60,7 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.Idioms" Version="1.5.11" />
+		<PackageReference Include="FSharp.Idioms" Version="1.5.12" />
 		<PackageReference Include="MahApps.Metro" Version="2.4.11" />
 		<PackageReference Include="System.Reactive" Version="7.0.0" />
 	</ItemGroup>
