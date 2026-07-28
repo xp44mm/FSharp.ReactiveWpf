@@ -9,8 +9,6 @@ open System.Reactive.Disposables
 open System.Reactive.Linq
 open MahApps.Metro.Controls
 
-//let assy = Assembly.GetExecutingAssembly()
-
 let private main (initialValue: 't) binder =
     let window =
         Internal.loadXaml "TextBoxWindow.xaml" :?> MetroWindow
@@ -24,7 +22,7 @@ let private main (initialValue: 't) binder =
     let mutable output = initialValue
 
     //仅有的不同部分
-    binder disposable textbox value
+    binder textbox value disposable 
 
     (confirm.Click :?> IObservable<_>)
         .WithLatestFrom(value)
@@ -34,7 +32,8 @@ let private main (initialValue: 't) binder =
         )
     |> disposable.Add
 
-    (cancel.Click :?> IObservable<_>).Subscribe(fun _ -> window.DialogResult <- Nullable(false))
+    (cancel.Click :?> IObservable<_>)
+        .Subscribe(fun _ -> window.DialogResult <- Nullable(false))
     |> disposable.Add
 
     window.Closed.Add(fun _ ->
@@ -43,17 +42,17 @@ let private main (initialValue: 't) binder =
     )
     window, fun () -> output
 
-let getFloat (initialValue: float) =
-    let binder disposable textbox textValue =
-        NumberBox.bind disposable textValue textbox
-    main initialValue binder
+//let getFloat (initialValue: float) =
+//    let binder disposable textbox textValue =
+//        NumberBox.bindLostFocus textbox disposable textValue 
+//    main initialValue binder
 
-let getInt64 (initialValue: int64) =
-    let binder disposable textbox textValue =
-        TextBox.bindingInt64Box disposable textValue textbox
-    main initialValue binder
+//let getInt64 (initialValue: int64) =
+//    let binder disposable textbox textValue =
+//        TextBox.bindingInt64Box disposable textValue textbox
+//    main initialValue binder
 
-let getInt (initialValue: int) =
-    let binder disposable textbox textValue =
-        IntegerBox.bind disposable textValue textbox
-    main initialValue binder
+//let getInt (initialValue: int) =
+//    let binder disposable textbox textValue =
+//        IntegerBox.bind disposable textValue textbox
+//    main initialValue binder

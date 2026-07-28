@@ -37,8 +37,8 @@
 		<Compile Include="TextBlock.fs" />
 		<Compile Include="Run.fs" />
 		<Compile Include="TextBox.fs" />
+		<Compile Include="NumberParser.fs" />
 		<Compile Include="NumberBox.fs" />
-		<Compile Include="IntegerBox.fs" />
 		<Compile Include="ComboBox.fs" />
 		<Compile Include="ToggleButton.fs" />
 		<Compile Include="CheckBox.fs" />
@@ -60,7 +60,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.Idioms" Version="1.5.12" />
+		<PackageReference Include="FSharp.Idioms" Version="1.5.14" />
 		<PackageReference Include="MahApps.Metro" Version="2.4.11" />
 		<PackageReference Include="System.Reactive" Version="7.0.0" />
 	</ItemGroup>

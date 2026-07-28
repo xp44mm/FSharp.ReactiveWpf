@@ -9,26 +9,12 @@ open System.Windows.Controls
 open FSharp.Idioms
 open System.Threading
 
-//一个双向绑定的文本输入框，专门用于处理浮点数输入。主要功能是：
-//将文本框的文本内容转换为浮点数
-//将浮点数更新同步回文本框
-let bind
-    (disposable: CompositeDisposable)
-    (value: ISubject<float>)
-    (textbox: TextBox)
-    =
-    (textbox.LostFocus :?> IObservable<_>)
-        .Select(fun _ -> textbox.Text)
-        .Select(fun t -> Decimal.tryFloat t)
-        .Where(Option.isSome)
-        .Select(Option.get)
-        .DistinctUntilChanged()
-        .Subscribe(value)
-    |> disposable.Add
-
+/// 从值到文本框
+let bindFocus<'t> (textbox: TextBox) (value: ISubject<'t>) (disposable: CompositeDisposable) =
     value
-        .DistinctUntilChanged()
         .Select(fun f -> f.ToString())
+        .DistinctUntilChanged()
+        .Throttle(TimeSpan.FromMilliseconds(100.0))
         .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun text ->
             if not textbox.IsFocused then
@@ -36,16 +22,44 @@ let bind
         )
     |> disposable.Add
 
-let create (disposable: CompositeDisposable) (value: ISubject<float>) =
+/// 从文本框到值
+let bindLostFocus<'T>
+    (parse: string -> 'T option)
+    (textbox: TextBox)
+    (value: ISubject<'T>)
+    (disposable: CompositeDisposable)
+    =
+    (textbox.LostFocus :?> IObservable<_>)
+        .Select(fun _ -> textbox.Text)
+        .Select(fun txt -> parse txt)
+        .Where(Option.isSome)
+        .Select(Option.get)
+        .DistinctUntilChanged()
+        .Subscribe(value)
+    |> disposable.Add
+
+let createNumber (parse: string -> 'n option) (value: ISubject<'n>) (disposable: CompositeDisposable) =
     let textbox = TextBox()
-
-    bind disposable value textbox
-
-    //textbox.Unloaded.Add(fun _ ->
-    //    disposable.Dispose()
-    //)
+    bindLostFocus parse textbox value disposable
+    bindFocus textbox value disposable
     textbox
 
-let createLocal (value: ISubject<float>) =
-    let disposable = new CompositeDisposable()
-    create disposable value
+let createFloat (value: ISubject<float>) (disposable: CompositeDisposable) =
+    createNumber FSharp.Idioms.Decimal.tryFloat value disposable
+
+let createSingle (value: ISubject<float32>) (disposable: CompositeDisposable) =
+    let parseSingle (s: string) =
+        FSharp.Idioms.Decimal.tryFloat s
+        |> Option.map float32
+    createNumber parseSingle value disposable
+
+let createInt64 (value: ISubject<int64>) (disposable: CompositeDisposable) =
+    let parseInt64 = FSharp.Idioms.Decimal.tryInt
+    createNumber parseInt64 value disposable
+
+let createInt (value: ISubject<int>) (disposable: CompositeDisposable) =
+    let parseInt (s: string) =
+        FSharp.Idioms.Decimal.tryInt s
+        |> Option.map int
+    createNumber parseInt value disposable  
+

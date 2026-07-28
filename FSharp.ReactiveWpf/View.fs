@@ -45,11 +45,6 @@ let numberBox (value: ISubject<float>) =
         )
     |> ignore
 
-    //textbox.Unloaded.Add(fun _ ->
-    //    sub1.Dispose()
-    //    sub2.Dispose()
-    //)
-
     textbox
 
 let checkBox (value: ISubject<bool>) =
@@ -57,10 +52,8 @@ let checkBox (value: ISubject<bool>) =
     cb.IsThreeState <- false
     let c = (cb.Checked :?> IObservable<_>).Select(fun _ -> true)
     let u = (cb.Unchecked :?> IObservable<_>).Select(fun _ -> false)
-    //let sub1 = 
     c.Merge(u).Subscribe(value)
     |> ignore
-    //let sub2 =
     value
         .DistinctUntilChanged()
         .ObserveOn(SynchronizationContext.Current)
@@ -73,10 +66,6 @@ let checkBox (value: ISubject<bool>) =
         )
     |> ignore
 
-    //cb.Unloaded.Add(fun _ ->
-    //    sub1.Dispose()
-    //    sub2.Dispose()
-    //)
     cb
 
 ///
@@ -84,5 +73,4 @@ let comboBox (index: ISubject<int>) =
     let comboBox = ComboBox()
     let disposable = new CompositeDisposable()
     ComboBox.bindIndex disposable index comboBox
-    //comboBox.Unloaded.Add(fun _ -> disposable.Dispose())
     comboBox

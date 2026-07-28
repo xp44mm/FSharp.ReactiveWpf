@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="FSharp.ReactiveWpf.Test/FSharp.ReactiveWpf.Test.fsproj" Id="543d2ccf-54d4-4f3e-925e-8ba7a4a897be" />
   <Project Path="FSharp.ReactiveWpf/FSharp.ReactiveWpf.fsproj" />
+  <Project Path="Windows/Windows.fsproj" Id="c24a8407-3349-4712-8375-51d22c7b9444" />
 </Solution>
