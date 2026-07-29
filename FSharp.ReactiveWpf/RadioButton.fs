@@ -11,19 +11,21 @@ open System.Threading
 
 let bindingRadioButton
     (disposable: CompositeDisposable)
-    (value: ISubject<bool>)
     (radioButton: RadioButton)
+    (value: ISubject<bool>)
     =
-    ToggleButton.bind disposable value radioButton
+    ToggleButton.bind disposable radioButton value
 
 let bindingRadioButtonGroup
     (disposable: CompositeDisposable)
-    (value: ISubject<int>)
     (radioButtons: RadioButton[])
+    (value: ISubject<int>)
     =
     let radioObservable =
         radioButtons
-        |> Array.mapi(fun i radio -> (radio.Checked :?> IObservable<_>).Select(fun _ -> i))
+        |> Array.mapi(fun i radio -> 
+            (radio.Checked :?> IObservable<_>)
+                .Select(fun _ -> i))
         |> Observable.Merge
 
     radioObservable.Subscribe(value) |> disposable.Add
@@ -47,8 +49,8 @@ let bindingRadioButtonGroup
 
 let bindingRadioButtonGroupUsingContent
     (disposable: CompositeDisposable)
-    (content: ISubject<string>)
     (radioButtons: RadioButton[])
+    (content: ISubject<string>)
     =
 
     let radioObservable =

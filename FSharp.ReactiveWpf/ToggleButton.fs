@@ -1,4 +1,5 @@
 ﻿module FSharp.ReactiveWpf.ToggleButton
+open FSharp.Idioms
 
 open System
 open System.Reactive.Linq
@@ -6,14 +7,14 @@ open System.Reactive.Subjects
 open System.Reactive.Disposables
 
 open System.Windows.Controls
-open FSharp.Idioms
-open System.Threading
 open System.Windows.Controls.Primitives
+
+open System.Threading
 
 let bind
     (disposable: CompositeDisposable)
-    (value: ISubject<bool>)
     (control: ToggleButton)
+    (value: ISubject<bool>)
     =
 
     control.IsThreeState <- false
@@ -34,15 +35,9 @@ let bind
         )
     |> disposable.Add
 
-/// 创建并绑定 Observable 到新的 ToggleButton 控件
-let create (value: ISubject<bool>) =
+let create 
+    (disposable: CompositeDisposable)
+    (value: ISubject<bool>) =
     let control = ToggleButton()
-    let disposable = new CompositeDisposable()
-    bind disposable value control
-    
-    // 添加清理逻辑
-    //control.Unloaded.Add(fun _ -> 
-    //    if not disposable.IsDisposed then
-    //        disposable.Dispose())
-    
+    bind disposable control value
     control

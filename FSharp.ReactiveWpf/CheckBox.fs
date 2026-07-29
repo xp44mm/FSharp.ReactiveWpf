@@ -11,23 +11,15 @@ open System.Threading
 
 let bind
     (disposable: CompositeDisposable)
-    (value: ISubject<bool>)
     (checkbox: CheckBox)
+    (value: ISubject<bool>)
     =
-    ToggleButton.bind disposable value checkbox
+    ToggleButton.bind disposable checkbox value
 
 let create (disposable: CompositeDisposable) (value: ISubject<bool>) (content: obj) =
     let check = CheckBox()
     check.IsThreeState <- false
     check.Content <- content
-    bind disposable value check
-    //check.Unloaded.Add(fun _ ->
-    //    if disposable.IsDisposed then
-    //        disposable.Dispose()
-    //)
-
+    bind disposable check value
     check
 
-let createLocal (value: ISubject<bool>) (content: obj) =
-    let disposable = new CompositeDisposable()
-    create disposable value content

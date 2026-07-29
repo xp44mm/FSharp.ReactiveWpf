@@ -1,53 +1,77 @@
 ﻿module Windows.MainWindow
 
 open System
-open System.IO
-
 open System.Windows
 open System.Windows.Controls
-open System.Windows.Documents
-open System.Windows.Input
-open System.Windows.Media
-open System.Windows.Threading
-
-open System.Reactive.Subjects
 open System.Reactive.Disposables
-open System.Reactive.Linq
-open System.Threading
-open System.Reflection
 
 open MahApps.Metro.Controls
 
-open FSharp.Idioms
 open FSharp.ReactiveWpf
 
 /// 初始化主窗口并绑定事件
 let createWindow () =
     let window = App.loadXaml "MainWindow.xaml" :?> MetroWindow
 
-    let openFileButton = window.FindName("openFileButton") :?> Button
-    let saveFileButton = window.FindName("saveFileButton") :?> Button
+    let stringButton = window.FindName("stringButton") :?> Button
+    let intButton = window.FindName("intButton") :?> Button
+    let floatButton = window.FindName("floatButton") :?> Button
 
     let disposable = new CompositeDisposable()
 
-
-    (openFileButton.Click :?> IObservable<_>)
+    (stringButton.Click :?> IObservable<_>)
         .Subscribe(fun _ ->
-            let dialog = Microsoft.Win32.OpenFileDialog()
-            dialog.Filter <- "JSON 文件 (*.json)|*.json|文本文件 (*.txt)|*.txt"
-            dialog.DefaultExt <- ".json"
-
+            let window, getResult = TextBoxWindow.getText "Enter a string value"
+            window.Title <- "string test"
+            if window.ShowDialog() = System.Nullable(true) then
+                let result = getResult()
+                MessageBox.Show(
+                    sprintf "String value: %s" result,
+                    "Input Result",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                )
+                |> ignore
+                ()
         )
     |> disposable.Add
 
-    (saveFileButton.Click :?> IObservable<_>)
+    // Int 按钮
+    (intButton.Click :?> IObservable<_>)
         .Subscribe(fun _ ->
-            let saveDialog = Microsoft.Win32.SaveFileDialog()
-            saveDialog.Filter <- "JSON 文件 (*.json)|*.json|文本文件 (*.txt)|*.txt"
-            saveDialog.DefaultExt <- ".json"
+            let window, getResult = TextBoxWindow.getInt 0
+            window.Title <- "integer test"
+            if window.ShowDialog() = System.Nullable(true) then
+                let input = getResult()
+                MessageBox.Show(
+                    sprintf "Integer value: %d" input,
+                    "Input Result",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                )
+                |> ignore
+                ()
+        )
+    |> disposable.Add
 
+    // Float 按钮
+    (floatButton.Click :?> IObservable<_>)
+        .Subscribe(fun _ ->
+            let window, getResult = TextBoxWindow.getFloat 0.0
+            window.Title <- "float test"
+            if window.ShowDialog() = System.Nullable(true) then
+                let value = getResult()
+                MessageBox.Show(
+                    sprintf "Float value: %g" value,
+                    "Input Result",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                )
+                |> ignore
+                ()
         )
     |> disposable.Add
 
     window.Closing.Add(fun _ -> disposable.Dispose())
+
     window

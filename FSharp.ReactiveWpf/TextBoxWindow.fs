@@ -8,10 +8,10 @@ open System.Reactive.Subjects
 open System.Reactive.Disposables
 open System.Reactive.Linq
 open MahApps.Metro.Controls
+open FSharp.Idioms
 
-let private main (initialValue: 't) binder =
-    let window =
-        Internal.loadXaml "TextBoxWindow.xaml" :?> MetroWindow
+let private main (binder: CompositeDisposable -> TextBox -> ISubject<'t> -> unit) (initialValue: 't) =
+    let window = Internal.loadXaml "TextBoxWindow.xaml" :?> MetroWindow
     let textbox = window.FindName("textbox") :?> TextBox
     let confirm = window.FindName("confirm") :?> Button
     let cancel = window.FindName("cancel") :?> Button
@@ -22,9 +22,10 @@ let private main (initialValue: 't) binder =
     let mutable output = initialValue
 
     //仅有的不同部分
-    binder textbox value disposable 
+    binder disposable textbox value
 
     (confirm.Click :?> IObservable<_>)
+        .Do(fun _ -> confirm.Focus() |> ignore)
         .WithLatestFrom(value)
         .Subscribe(fun struct (_, v) ->
             output <- v
@@ -32,8 +33,7 @@ let private main (initialValue: 't) binder =
         )
     |> disposable.Add
 
-    (cancel.Click :?> IObservable<_>)
-        .Subscribe(fun _ -> window.DialogResult <- Nullable(false))
+    (cancel.Click :?> IObservable<_>).Subscribe(fun _ -> window.DialogResult <- Nullable(false))
     |> disposable.Add
 
     window.Closed.Add(fun _ ->
@@ -42,17 +42,26 @@ let private main (initialValue: 't) binder =
     )
     window, fun () -> output
 
-//let getFloat (initialValue: float) =
-//    let binder disposable textbox textValue =
-//        NumberBox.bindLostFocus textbox disposable textValue 
-//    main initialValue binder
+let getText (initialValue: string) =
+    let binder textbox disposable textValue =
+        TextBox.bindFocus textbox disposable textValue
+        TextBox.bindLostFocus textbox disposable textValue
+    main binder initialValue
 
-//let getInt64 (initialValue: int64) =
-//    let binder disposable textbox textValue =
-//        TextBox.bindingInt64Box disposable textValue textbox
-//    main initialValue binder
+let getFloat (initialValue: float) =
+    let binder disposable textbox textValue =
+        NumberBox.bindFocus disposable textbox textValue
+        NumberBox.bindLostFocus disposable textbox JsonNumber.tryParse textValue
+    main binder initialValue
 
-//let getInt (initialValue: int) =
-//    let binder disposable textbox textValue =
-//        IntegerBox.bind disposable textValue textbox
-//    main initialValue binder
+let getInt64 (initialValue: int64) =
+    let binder disposable textbox textValue =
+        NumberBox.bindFocus disposable textbox textValue
+        NumberBox.bindLostFocus disposable textbox Int64.tryParse textValue
+    main binder initialValue
+
+let getInt (initialValue: int) =
+    let binder disposable textbox textValue =
+        NumberBox.bindFocus disposable textbox textValue
+        NumberBox.bindLostFocus disposable textbox (Int64.tryParse >> Option.map int) textValue
+    main binder initialValue

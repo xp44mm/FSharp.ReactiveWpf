@@ -3,18 +3,10 @@ module FSharp.ReactiveWpf.NumberParser
 open System
 open FSharp.Idioms
 
-let tryFloat (inp: string) =
-    if String.IsNullOrWhiteSpace inp then
-        None
-    else
-        Decimal.tryFloat inp
+let tryFloat = JsonNumber.tryParse
 
 let trySingle = tryFloat >> Option.map single
 
-let tryInt64 (inp: string) =
-    if String.IsNullOrWhiteSpace inp then
-        None
-    else
-        Decimal.tryInt inp
+let tryInt64 = Int64.tryParse
 
-let tryInt = Decimal.tryInt >> Option.map int
+let tryInt = tryInt64 >> Option.map int

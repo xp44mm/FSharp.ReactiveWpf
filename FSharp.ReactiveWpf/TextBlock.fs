@@ -3,20 +3,27 @@
 open System
 open System.Reactive.Linq
 open System.Reactive.Disposables
-
 open System.Windows.Controls
 open System.Threading
+
 open FSharp.Idioms.Literal
 
-let bind (disposable: CompositeDisposable) (data: IObservable<'t>) (tb: TextBlock) =
+let bind (disposable: CompositeDisposable) (tb: TextBlock) (format: string) (data: IObservable<'t>) =
     data
-        .Select(stringify)
+        .Select(formatValue format)
+        .DistinctUntilChanged()
+        .Throttle(TimeSpan.FromMilliseconds(100.0))
         .ObserveOn(SynchronizationContext.Current)
-        .Subscribe((fun s -> tb.Text <- s), (fun (ex: exn) -> tb.Text <- ex.Message))
+        .Subscribe(
+            onNext = (fun s -> tb.Text <- s), 
+            onError = (fun (ex: exn) -> tb.Text <- ex.Message)
+            )
     |> disposable.Add
 
-let create (disposable: CompositeDisposable) (data: IObservable<'t>) =
+let formatCreate (disposable: CompositeDisposable) (format: string) (data: IObservable<'t>) =
     let tb = TextBlock()
-    bind disposable data tb
-    //tb.Unloaded.Add(fun _ -> disposable.Dispose())
+    bind disposable tb format data
     tb
+
+let create (disposable: CompositeDisposable) (data: IObservable<'t>) =
+    formatCreate disposable "" data

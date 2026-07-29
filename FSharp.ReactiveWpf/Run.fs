@@ -8,7 +8,7 @@ open FSharp.Idioms.Literal
 open System.Threading
 open System.Windows.Documents
 
-let bind (format: string) (rn: Run) (data: IObservable<'t>) (disposable: CompositeDisposable) =
+let bind (disposable: CompositeDisposable) (rn: Run) (format: string) (data: IObservable<'t>) =
     data
         .Select(formatValue format)
         .DistinctUntilChanged()
@@ -20,15 +20,12 @@ let bind (format: string) (rn: Run) (data: IObservable<'t>) (disposable: Composi
             )
     |> disposable.Add
 
-let formatCreate (format: string) (data: IObservable<'t>) (disposable: CompositeDisposable) =
+let formatCreate (disposable: CompositeDisposable) (format: string) (data: IObservable<'t>) =
     let rn = Run()
-    bind format rn data disposable
+    bind disposable rn format data
     rn
 
-let create (data: IObservable<'t>) (disposable: CompositeDisposable) =
-    formatCreate "" data disposable
+let create (disposable: CompositeDisposable) (data: IObservable<'t>) =
+    formatCreate disposable "" data
 
-let createLocal (data: IObservable<'t>) =
-    let disposable = new CompositeDisposable()
-    create data disposable
 

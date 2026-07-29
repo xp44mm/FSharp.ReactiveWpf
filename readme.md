@@ -1,156 +1,114 @@
 # FSharp.ReactiveWpf
 
-一个用于 F# 和 WPF 的响应式数据绑定库，提供类型安全且函数式的 UI 绑定解决方案。
+一个用于 F# 和 WPF 的轻量级响应式绑定工具集。库通过 System.Reactive 提供各种控件与 IObservable / ISubject 的绑定辅助函数，便于在函数式风格下构建 WPF 界面。
 
+快速说明：文档中的 API 以模块名.函数名 形式给出，示例使用 System.Reactive.Subjects 和 System.Reactive.Disposables 来管理数据流与生命周期。
 
-### 基本数据绑定
+---
+
+## 快速开始
+
+示例演示如何创建数据源并将其绑定到控件：
 
 ```fsharp
-open FSharp.ReactiveWpf.Binding
 open System.Reactive.Subjects
 open System.Reactive.Disposables
+open System.Windows
+open System.Windows.Controls
+open FSharp.ReactiveWpf
 
-// 创建可观察数据源
-let numberValue = new BehaviorSubject<float>(0.0)
-let textValue = new BehaviorSubject<string>("Hello")
-let boolValue = new BehaviorSubject<bool>(false)
+let disposable = new CompositeDisposable()
 
-// 创建 disposable 容器
-let disposables = new CompositeDisposable()
+// 数值输入框（浮点）
+let numberSubject = new BehaviorSubject<float>(0.0)
+let numberTextBox = NumberBox.createFloat disposable numberSubject
 
-// 绑定文本框（浮点数）
-NumberBox.bind disposables numberValue myTextBox
+// 文本绑定到已有 TextBox
+let textSubject = new BehaviorSubject<string>("hello")
+let tb = TextBox()
+TextBox.bindFocus disposable tb textValue
+TextBox.bindLostFocus disposable tb textValue
 
-// 绑定文本框（字符串）
-TextBox.bind disposables textValue myStringTextBox
+// 复选框
+let boolSubject = new BehaviorSubject<bool>(false)
+let check = CheckBox.create disposable boolSubject "启用"
 
-// 绑定复选框
-CheckBox.bind disposables boolValue myCheckBox
+// 单选按钮组（按索引）
+let radioIndex = new BehaviorSubject<int>(-1)
+let r1, r2, r3 = RadioButton(), RadioButton(), RadioButton()
+r1.Content <- "A"; r2.Content <- "B"; r3.Content <- "C"
+RadioButton.bindingRadioButtonGroup disposable radioIndex [| r1; r2; r3 |]
 
-// 绑定单选按钮组
-let radioButtons = [| radio1; radio2; radio3 |]
-RadioButton.bindingRadioButtonGroup disposables selectedIndex radioButtons
-```
+// Run 文本元素
+let run = Run.create disposable textSubject
 
-### 数字输入对话框
-
-```fsharp
-open FSharp.ReactiveWpf.TextBoxWindow
-
-// 获取浮点数输入
-let (window, getResult) = getFloat 0.0
-
-if window.ShowDialog() = Nullable true then
-    let result = getResult()
-    printfn "用户输入: %f" result
-
-// 获取整数输入
-let (window, getResult) = getInt 42
-
-if window.ShowDialog() = Nullable true then
-    let result = getResult()
-    printfn "用户输入: %d" result
-```
-
-## API 参考
-
-### 绑定函数
-
-#### 文本框绑定
-- `NumberBox.bind` - 浮点数文本框
-- `TextBox.bindingIntegerBox` - 整数文本框  
-- `TextBox.bindingInt64Box` - 64位整数文本框
-- `TextBox.bindingTextBox` - 字符串文本框
-
-#### 选择控件绑定
-- `ComboBox.bindIndex` - 组合框（索引绑定）
-- `ComboBox.bindItem` - 组合框（项绑定）
-- `RadioButton.bindingRadioButtonGroup` - 单选按钮组
-
-#### 切换控件绑定
-- `CheckBox.bind` - 复选框
-- `RadioButton.bindingRadioButton` - 单选按钮
-
-#### 文本显示
-- `Run.bind` - Run 文本元素绑定
-
-### 对话框函数
-
-- `TextBoxWindow.getFloat` - 获取浮点数输入
-- `TextBoxWindow.getInt` - 获取整数输入  
-- `TextBoxWindow.getInt64` - 获取64位整数输入
-
-# MediaPlayer.createPlaylistObservable
-
-## 函数签名
-
-```fsharp
-val createPlaylistObservable : 
-    mediaPlayer:MediaPlayer -> 
-    subject:IObservable<string[]> -> 
-    IObservable<unit>
-```
-
-## 功能描述
-
-创建一个响应式音频播放器，能够监听播放列表序列并自动按顺序播放其中的音频文件。当接收到新的播放列表时，会自动停止当前播放并开始新的播放列表。
-
-## 参数说明
-
-- `mediaPlayer` : `System.Windows.Media.MediaPlayer`  
-  用于实际播放音频的媒体播放器实例
-
-- `subject` : `IObservable<string[]>`  
-  播放列表的观察序列，每次发射一个字符串数组，每个字符串代表一个音频文件的完整路径
-
-## 返回值
-
-返回一个 `IObservable<unit>`，表示播放过程的观察序列。主要用于订阅播放生命周期，实际播放是副作用。
-
-
-
-## 使用示例
-
-```fsharp
+// 播放列表 (MediaPlayer)
 let mediaPlayer = new MediaPlayer()
-let playlistSubject = new Subject<string[]>()
+let playlistSubject = new BehaviorSubject<seq<string>>(Seq.empty)
+let playback = MediaPlayer.createPlaylistObservable mediaPlayer (playlistSubject :> IObservable<_>)
+let sub = playback.Subscribe() // 触发播放副作用
 
-// 创建播放器观察序列
-let playback = MediaPlayer.createPlaylistObservable mediaPlayer playlistSubject
-
-// 订阅播放过程
-use subscription = playback.Subscribe()
-
-// 发送播放列表
-playlistSubject.OnNext([|
-    @"C:\audio\file1.mp3"
-    @"C:\audio\file2.mp3" 
-    @"C:\audio\file3.mp3"
-|])
+// 将控件加入窗口等
 ```
 
+---
 
+## 主要 API 参考（按模块）
 
+注意：下列签名为库中可见函数的简化描述，实际使用时以代码编辑器的提示为准。
 
-## 完整示例
+- NumberBox
+  - createFloat : CompositeDisposable -> TextBox -> ISubject<float> -> TextBox
+  - createSingle : CompositeDisposable -> TextBox -> ISubject<float32> -> TextBox
+  - createInt64 : CompositeDisposable -> TextBox -> ISubject<int64> -> TextBox
+  - createInt : CompositeDisposable -> TextBox -> ISubject<int> -> TextBox
+  - bindFocus / bindLostFocus : 绑定焦点事件，更新状态
+- TextBox
+  - bindFocus : CompositeDisposable -> TextBox -> IObservable<string> -> unit
+  - bindLostFocus : CompositeDisposable -> TextBox -> ISubject<string> -> unit
+  - create : CompositeDisposable -> TextBox -> ISubject<string> -> unit
+- ComboBox
+  - bindIndex : CompositeDisposable -> ComboBox -> ISubject<int> -> unit
+  - bindItem : CompositeDisposable -> ComboBox -> ISubject<'t> -> unit
+  - indexCreate : CompositeDisposable -> ComboBox -> seq<'t> -> ISubject<int> -> ComboBox
+  - itemCreate : CompositeDisposable -> ComboBox -> seq<'t> -> ISubject<'t> -> ComboBox
+- ToggleButton / CheckBox
+  - ToggleButton.bind : CompositeDisposable -> ToggleButton -> ISubject<bool> -> unit
+  - ToggleButton.create :  CompositeDisposable -> ToggleButton -> ISubject<bool>
+  - CheckBox.bind : CompositeDisposable -> CheckBox -> ISubject<bool> -> unit
+  - CheckBox.create : CompositeDisposable -> CheckBox -> ISubject<bool> -> obj -> CheckBox
+- RadioButton
+  - bindingRadioButton : CompositeDisposable -> ISubject<bool> -> RadioButton -> unit
+  - bindingRadioButtonGroup : CompositeDisposable -> ISubject<int> -> RadioButton[] -> unit
+  - bindingRadioButtonGroupUsingContent : CompositeDisposable -> ISubject<string> -> RadioButton[] -> unit
+- Run
+  - bind : CompositeDisposable -> Run -> string -> IObservable<'t> -> unit
+  - formatCreate : CompositeDisposable -> Run -> string -> IObservable<'t> -> Run
+  - create : CompositeDisposable -> Run -> IObservable<'t> -> Run
+- MediaPlayer
+  - playMany : MediaPlayer -> string[] -> IDisposable
+  - createPlaylistObservable : MediaPlayer -> IObservable<#seq<string>> -> IObservable<unit>
+  - createPlaylistObservable2 : (string -> unit) -> MediaPlayer -> IObservable<#seq<string>> -> IObservable<unit>
 
-```fsharp
-```
+---
 
-## 设计理念
+## 使用注意
 
-### 响应式编程
-库基于观察者模式，使用 `BehaviorSubject<T>` 作为数据源，确保数据流的实时性和一致性。
+- 大多数绑定函数都需要一个 CompositeDisposable 来管理订阅的生命周期。建议将控件与窗口的生命周期相关联，并在窗口卸载/关闭时销毁 disposable。
+- 对于需要创建控件的函数（如 NumberBox.createFloat、ComboBox.indexCreate 等），函数会返回新创建的控件实例
 
-### 资源管理
-使用 `CompositeDisposable` 统一管理订阅，避免内存泄漏。
+---
 
-### 关注点分离
-UI 逻辑与业务逻辑清晰分离，便于测试和维护。
+## 设计要点
+
+- 基于 System.Reactive：所有数据流使用 IObservable / ISubject，以便函数式组合与订阅管理。
+- 关注点分离：UI 控件创建/绑定逻辑与业务数据分离，便于测试。
+
+---
 
 ## 贡献
 
-欢迎提交 Issue 和 Pull Request！
+欢迎提交 Issue 与 Pull Request。请确保代码风格与现有文件一致并附带简单说明。
 
 ## 许可证
 

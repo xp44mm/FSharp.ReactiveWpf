@@ -1,2 +1,10 @@
-﻿// For more information see https://aka.ms/fsharp-console-apps
-printfn "Hello from F#"
+﻿module Windows.Program
+
+open System
+
+[<STAThread>]
+[<EntryPoint>]
+let main _ =
+    let app = App.app
+    let w = MainWindow.createWindow()
+    app.Run(w)

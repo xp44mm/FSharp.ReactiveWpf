@@ -10,7 +10,7 @@ open FSharp.Idioms
 open System.Threading
 
 /// 从值到文本框
-let bindFocus<'t> (textbox: TextBox) (value: ISubject<'t>) (disposable: CompositeDisposable) =
+let bindFocus<'t> (disposable: CompositeDisposable) (textbox: TextBox) (value: ISubject<'t>) =
     value
         .Select(fun f -> f.ToString())
         .DistinctUntilChanged()
@@ -24,10 +24,10 @@ let bindFocus<'t> (textbox: TextBox) (value: ISubject<'t>) (disposable: Composit
 
 /// 从文本框到值
 let bindLostFocus<'T>
-    (parse: string -> 'T option)
-    (textbox: TextBox)
-    (value: ISubject<'T>)
     (disposable: CompositeDisposable)
+    (textbox: TextBox)
+    (parse: string -> 'T option)
+    (value: ISubject<'T>)
     =
     (textbox.LostFocus :?> IObservable<_>)
         .Select(fun _ -> textbox.Text)
@@ -38,28 +38,24 @@ let bindLostFocus<'T>
         .Subscribe(value)
     |> disposable.Add
 
-let createNumber (parse: string -> 'n option) (value: ISubject<'n>) (disposable: CompositeDisposable) =
+let createBase (disposable: CompositeDisposable) (parse: string -> 'n option) (value: ISubject<'n>) =
     let textbox = TextBox()
-    bindLostFocus parse textbox value disposable
-    bindFocus textbox value disposable
+    bindLostFocus disposable textbox parse value
+    bindFocus disposable textbox value
     textbox
 
-let createFloat (value: ISubject<float>) (disposable: CompositeDisposable) =
-    createNumber FSharp.Idioms.Decimal.tryFloat value disposable
+let createFloat (disposable: CompositeDisposable) (value: ISubject<float>) =
+    createBase disposable JsonNumber.tryParse value
 
-let createSingle (value: ISubject<float32>) (disposable: CompositeDisposable) =
-    let parseSingle (s: string) =
-        FSharp.Idioms.Decimal.tryFloat s
-        |> Option.map float32
-    createNumber parseSingle value disposable
+let createSingle (disposable: CompositeDisposable) (value: ISubject<float32>) =
+    let parseSingle =
+        JsonNumber.tryParse
+        >> Option.map float32
+    createBase disposable parseSingle value
 
-let createInt64 (value: ISubject<int64>) (disposable: CompositeDisposable) =
-    let parseInt64 = FSharp.Idioms.Decimal.tryInt
-    createNumber parseInt64 value disposable
+let createInt64 (disposable: CompositeDisposable) (value: ISubject<int64>) = 
+    createBase disposable Int64.tryParse value
 
-let createInt (value: ISubject<int>) (disposable: CompositeDisposable) =
-    let parseInt (s: string) =
-        FSharp.Idioms.Decimal.tryInt s
-        |> Option.map int
-    createNumber parseInt value disposable  
-
+let createInt (disposable: CompositeDisposable) (value: ISubject<int>) =
+    let parseInt = Int64.tryParse >> Option.map int
+    createBase disposable parseInt value

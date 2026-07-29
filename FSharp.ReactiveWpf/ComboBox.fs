@@ -12,8 +12,8 @@ open System.Reactive.Disposables
 /// 绑定到索引
 let bindIndex
     (disposable: CompositeDisposable)
-    (index: ISubject<int>)
     (comboBox: ComboBox)
+    (index: ISubject<int>)
     =
     // ComboBox -> Subject
     (comboBox.SelectionChanged :?> IObservable<_>)
@@ -37,8 +37,8 @@ let bindIndex
 /// 绑定到具体的项目值
 let bindItem
     (disposable: CompositeDisposable)
-    (item: ISubject<'t>)
     (comboBox: ComboBox)
+    (item: ISubject<'t>)
     =
     // ComboBox -> Subject
     (comboBox.SelectionChanged :?> IObservable<_>)
@@ -69,33 +69,26 @@ let bindItem
     |> disposable.Add
 
 /// 创建带有预设项目列表并按索引绑定的 ComboBox
-let createByIndex
+let indexCreate
     (disposable: CompositeDisposable)
-    (items: seq<string>) 
+    (items: #seq<string>) 
     (index: ISubject<int>)
     =
     let comboBox = ComboBox()
-    
     for item in items do
         comboBox.Items.Add(item) |> ignore
-
-    bindIndex disposable index comboBox
-    
-    //comboBox.Unloaded.Add(fun _ -> disposable.Dispose())
+    bindIndex disposable comboBox index
     comboBox
 
 /// 创建带有预设项目列表并按项目值绑定的 ComboBox
-let createByItems 
+let itemCreate
     (disposable: CompositeDisposable)
-    (items: seq<string>) 
+    (items: #seq<string>) 
     (item: ISubject<string>)
     =
     let comboBox = ComboBox()
-    
     for itemText in items do
         comboBox.Items.Add(itemText) |> ignore
-
-    bindItem disposable item comboBox
-
+    bindItem disposable comboBox item
     comboBox
 
