@@ -82,20 +82,16 @@ let sub = playback.Subscribe() // 触发播放副作用
   - bindingRadioButtonGroup : CompositeDisposable -> ISubject<int> -> RadioButton[] -> unit
   - bindingRadioButtonGroupUsingContent : CompositeDisposable -> ISubject<string> -> RadioButton[] -> unit
 - Run
-  - bind : CompositeDisposable -> Run -> string -> IObservable<'t> -> unit
-  - formatCreate : CompositeDisposable -> Run -> string -> IObservable<'t> -> Run
-  - create : CompositeDisposable -> Run -> IObservable<'t> -> Run
+  - bind : CompositeDisposable -> Run -> IObservable<string> -> unit
+  - create : CompositeDisposable -> Run -> IObservable<string> -> Run
+- TextBlock
+  - bind : CompositeDisposable -> TextBlock -> IObservable<string> -> unit
+  - create : CompositeDisposable -> TextBlock -> IObservable<string> -> TextBlock
+
 - MediaPlayer
   - playMany : MediaPlayer -> string[] -> IDisposable
   - createPlaylistObservable : MediaPlayer -> IObservable<#seq<string>> -> IObservable<unit>
   - createPlaylistObservable2 : (string -> unit) -> MediaPlayer -> IObservable<#seq<string>> -> IObservable<unit>
-
----
-
-## 使用注意
-
-- 大多数绑定函数都需要一个 CompositeDisposable 来管理订阅的生命周期。建议将控件与窗口的生命周期相关联，并在窗口卸载/关闭时销毁 disposable。
-- 对于需要创建控件的函数（如 NumberBox.createFloat、ComboBox.indexCreate 等），函数会返回新创建的控件实例
 
 ---
 

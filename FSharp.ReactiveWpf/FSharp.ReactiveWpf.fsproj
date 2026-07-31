@@ -11,14 +11,14 @@
 		<Title>一个用于 F# 和 WPF 的响应式数据绑定库，提供类型安全且函数式的 UI 绑定解决方案。</Title>
 		<Description>System.Reactive &amp; WPF 的响应式数据绑定，F#语言编写</Description>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
-		<PackageReleaseNotes>disposible</PackageReleaseNotes>
+		<PackageReleaseNotes>TextAlignment</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<Authors>xp44m</Authors>
 		<Company>34696643@qq.com</Company>
 		<Copyright>xp44mm</Copyright>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-		<Version>0.0.22</Version>
+		<Version>0.1.2</Version>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.ReactiveWpf</RepositoryUrl>
 		<PackageTags>fsharp;reactive;wpf;xaml</PackageTags>
 	</PropertyGroup>
@@ -34,8 +34,10 @@
 		<Compile Include="ObservableArray.fs" />
 		<Compile Include="XamlLoader.fs" />
 		<Compile Include="Internal.fs" />
-		<Compile Include="TextBlock.fs" />
+		<Compile Include="TableCell.fs" />
+		<Compile Include="Paragraph.fs" />
 		<Compile Include="Run.fs" />
+		<Compile Include="TextBlock.fs" />
 		<Compile Include="TextBox.fs" />
 		<Compile Include="NumberParser.fs" />
 		<Compile Include="NumberBox.fs" />

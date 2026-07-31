@@ -3,7 +3,10 @@
 open System
 open System.Windows
 open System.Windows.Controls
+
 open System.Reactive.Disposables
+open System.Reactive.Subjects
+open System.Reactive.Linq
 
 open MahApps.Metro.Controls
 
@@ -16,8 +19,11 @@ let createWindow () =
     let stringButton = window.FindName("stringButton") :?> Button
     let intButton = window.FindName("intButton") :?> Button
     let floatButton = window.FindName("floatButton") :?> Button
+    let textBlock = window.FindName("textBlock") :?> TextBlock
 
     let disposable = new CompositeDisposable()
+
+    let f = new BehaviorSubject<float>(0.0)
 
     (stringButton.Click :?> IObservable<_>)
         .Subscribe(fun _ ->
@@ -61,17 +67,15 @@ let createWindow () =
             window.Title <- "float test"
             if window.ShowDialog() = System.Nullable(true) then
                 let value = getResult()
-                MessageBox.Show(
-                    sprintf "Float value: %g" value,
-                    "Input Result",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                )
-                |> ignore
-                ()
+                f.OnNext(value)
         )
     |> disposable.Add
 
-    window.Closing.Add(fun _ -> disposable.Dispose())
+    let data =
+        f.Select(fun value -> value.ToString("0.##"))
 
+    TextBlock.bind disposable textBlock data
+
+    window.Closing.Add(fun _ -> disposable.Dispose())
     window
+

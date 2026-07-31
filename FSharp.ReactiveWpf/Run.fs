@@ -4,13 +4,14 @@ open System
 open System.Reactive.Linq
 open System.Reactive.Disposables
 
-open FSharp.Idioms.Literal
-open System.Threading
 open System.Windows.Documents
+open System.Threading
 
-let bind (disposable: CompositeDisposable) (rn: Run) (format: string) (data: IObservable<'t>) =
+let bind 
+    (disposable: CompositeDisposable) 
+    (rn: Run) 
+    (data: IObservable<string>) =
     data
-        .Select(formatValue format)
         .DistinctUntilChanged()
         .Throttle(TimeSpan.FromMilliseconds(100.0))
         .ObserveOn(SynchronizationContext.Current)
@@ -20,12 +21,9 @@ let bind (disposable: CompositeDisposable) (rn: Run) (format: string) (data: IOb
             )
     |> disposable.Add
 
-let formatCreate (disposable: CompositeDisposable) (format: string) (data: IObservable<'t>) =
+let create (disposable: CompositeDisposable) (data: IObservable<string>) =
     let rn = Run()
-    bind disposable rn format data
+    bind disposable rn data
     rn
-
-let create (disposable: CompositeDisposable) (data: IObservable<'t>) =
-    formatCreate disposable "" data
 
 

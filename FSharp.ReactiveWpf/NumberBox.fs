@@ -5,9 +5,10 @@ open System.Reactive.Linq
 open System.Reactive.Subjects
 open System.Reactive.Disposables
 
+open System.Windows
 open System.Windows.Controls
-open FSharp.Idioms
 open System.Threading
+open FSharp.Idioms
 
 /// 从值到文本框
 let bindFocus<'t> (disposable: CompositeDisposable) (textbox: TextBox) (value: ISubject<'t>) =
@@ -40,6 +41,7 @@ let bindLostFocus<'T>
 
 let createBase (disposable: CompositeDisposable) (parse: string -> 'n option) (value: ISubject<'n>) =
     let textbox = TextBox()
+    textbox.TextAlignment <- TextAlignment.Right
     bindLostFocus disposable textbox parse value
     bindFocus disposable textbox value
     textbox

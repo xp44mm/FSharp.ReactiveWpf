@@ -23,6 +23,11 @@
             Margin="5"
             Content="float" />
 
+        <TextBlock
+            x:Name="textBlock"
+            Margin="5"
+            Text="TextBlock" />
+
     </StackPanel>
 
 </metro:MetroWindow>
