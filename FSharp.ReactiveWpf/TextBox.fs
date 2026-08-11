@@ -1,6 +1,7 @@
 ﻿module FSharp.ReactiveWpf.TextBox
 
 open System
+open System.Windows
 open System.Windows.Controls
 
 open System.Reactive.Linq
@@ -43,3 +44,33 @@ let create
     bindLostFocus disposable textbox value
     bindFocus disposable textbox value
     textbox
+
+let defaultStyle =
+    match Application.Current.TryFindResource(typeof<TextBox>) with
+    | :? Style as style -> style
+    | null -> Style(typeof<TextBox>)
+    | x -> failwith $"never: {x.GetType()}"
+
+let successStyle =
+    let st = Style(typeof<TextBox>, defaultStyle)
+    Setter(TextBox.BorderBrushProperty, Brushes.Success)
+    |> st.Setters.Add
+    st
+
+let dangerStyle =
+    let st = Style(typeof<TextBox>, defaultStyle)
+    Setter(TextBox.BorderBrushProperty, Brushes.Danger)
+    |> st.Setters.Add
+    st
+
+let successDangerStyle (success: bool) =
+    if success then
+        successStyle
+    else
+        dangerStyle
+
+let normalDangerStyle (normal: bool) =
+    if normal then
+        defaultStyle
+    else
+        dangerStyle

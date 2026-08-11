@@ -11,7 +11,7 @@ let width (value: GridLength) (col: TableColumn) =
 
 /// col.Width <- GridLength(value)
 let widthPixels (value: double) (col: TableColumn) =
-    col.Width <- GridLength(value)
+    col.Width <- GridLength(value, GridUnitType.Pixel)
     col
 
 /// col.Width <- GridLength(value, GridUnitType.Star)
@@ -28,5 +28,6 @@ let widthAuto (col: TableColumn) =
 let background (brush: Brush) (col: TableColumn) =
     col.Background <- brush
     col
-/// tbl.Columns.Add(col)
-let appendTo (tbl: Table) (col: TableColumn) = tbl.Columns.Add(col)
+
+///// tbl.Columns.Add(col)
+//let appendTo (tbl: Table) (col: TableColumn) = tbl.Columns.Add(col)

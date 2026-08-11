@@ -1,16 +1,24 @@
 ﻿module FSharp.ReactiveWpf.Run
 
 open System
+
 open System.Reactive.Linq
 open System.Reactive.Disposables
 
+open System.Windows
+open System.Windows.Controls
 open System.Windows.Documents
+open System.Windows.Media
+
 open System.Threading
+
+open FSharp.Idioms.Literal
 
 let bind 
     (disposable: CompositeDisposable) 
     (rn: Run) 
     (data: IObservable<string>) =
+
     data
         .DistinctUntilChanged()
         .Throttle(TimeSpan.FromMilliseconds(100.0))
@@ -26,4 +34,45 @@ let create (disposable: CompositeDisposable) (data: IObservable<string>) =
     bind disposable rn data
     rn
 
+let defaultStyle =
+    match Application.Current.TryFindResource(typeof<Run>) with
+    | :? Style as style -> style
+    | null -> Style(typeof<Run>)
+    | x -> failwith $"never: {x.GetType()}"
+
+let TransparentStyle =
+    let st = Style(typeof<Run>, defaultStyle)
+    Setter(TextElement.ForegroundProperty, Brushes.Transparent)
+    |> st.Setters.Add
+    st
+
+let DangerStyle =
+    let st = Style(typeof<Run>, defaultStyle)
+    Setter(TextElement.ForegroundProperty, Brushes.Danger)
+    |> st.Setters.Add
+    st
+
+let SuccessStyle =
+    let st = Style(typeof<Run>, defaultStyle)
+    Setter(TextElement.ForegroundProperty, Brushes.Success)
+    |> st.Setters.Add
+    st
+
+let visibleRunStyle (visible: bool) =
+    if visible then
+        defaultStyle
+    else
+        TransparentStyle
+
+let normalDangerRunStyle (normal: bool) =
+    if normal then
+        defaultStyle
+    else
+        DangerStyle
+
+let successDangerRunStyle (success: bool) =
+    if success then
+        SuccessStyle
+    else
+        DangerStyle
 

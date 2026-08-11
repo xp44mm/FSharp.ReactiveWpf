@@ -43,5 +43,5 @@ let fontStyle (value: FontStyle) (rg: TableRowGroup) =
 let foreground (brush: Brush) (rg: TableRowGroup) =
     rg.Foreground <- brush
     rg
-/// tbl.RowGroups.Add(rg)
-let appendTo (tbl: Table) (rg: TableRowGroup) = tbl.RowGroups.Add(rg)
+///// tbl.RowGroups.Add(rg)
+//let appendTo (tbl: Table) (rg: TableRowGroup) = tbl.RowGroups.Add(rg)

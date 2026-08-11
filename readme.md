@@ -110,3 +110,14 @@ let sub = playback.Subscribe() // 触发播放副作用
 
 GPLv3
 
+## 参考
+
+WPF 的属性值优先级：
+
+1. 本地值（Local Value）- 最高优先级
+2. 样式触发器（Style Triggers）
+3. 模板触发器（Template Triggers）
+4. 样式设置器（Style Setters）
+5. 主题样式（Theme Style）
+6. 继承值（Inherited Value）
+7. 默认值（Default Value）- 最低优先级
