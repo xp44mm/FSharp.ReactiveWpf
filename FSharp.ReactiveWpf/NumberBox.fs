@@ -15,7 +15,7 @@ let bindFocus<'t> (disposable: CompositeDisposable) (textbox: TextBox) (value: I
     value
         .Select(fun f -> f.ToString())
         .DistinctUntilChanged()
-        .Throttle(TimeSpan.FromMilliseconds(100.0))
+        .Throttle(TimeSpan.FromMilliseconds(50L))
         .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun text ->
             if not textbox.IsFocused then

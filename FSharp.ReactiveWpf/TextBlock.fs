@@ -13,7 +13,7 @@ let bind
     =
     data
         .DistinctUntilChanged()
-        .Throttle(TimeSpan.FromMilliseconds(100.0))
+        .Throttle(TimeSpan.FromMilliseconds(50L))
         .ObserveOn(SynchronizationContext.Current)
         .Subscribe(
             onNext = (fun s -> tb.Text <- s), 

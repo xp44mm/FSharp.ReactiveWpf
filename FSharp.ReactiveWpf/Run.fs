@@ -14,14 +14,10 @@ open System.Threading
 
 open FSharp.Idioms.Literal
 
-let bind 
-    (disposable: CompositeDisposable) 
-    (rn: Run) 
-    (data: IObservable<string>) =
-
+let bindText (disposable: CompositeDisposable) (rn: Run) (data: IObservable<string>) =
     data
         .DistinctUntilChanged()
-        .Throttle(TimeSpan.FromMilliseconds(100.0))
+        .Throttle(TimeSpan.FromMilliseconds(50L))
         .ObserveOn(SynchronizationContext.Current)
         .Subscribe(
             onNext = (fun s -> rn.Text <- s), 
@@ -31,7 +27,7 @@ let bind
 
 let create (disposable: CompositeDisposable) (data: IObservable<string>) =
     let rn = Run()
-    bind disposable rn data
+    bindText disposable rn data
     rn
 
 let defaultStyle =
@@ -76,3 +72,25 @@ let successDangerRunStyle (success: bool) =
     else
         DangerStyle
 
+let bindVisible (disposable: CompositeDisposable) (run: Run) (visible: IObservable<bool>) =
+    visible
+        .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
+
+        .Subscribe(fun v -> run.Style <- visibleRunStyle v)
+    |> disposable.Add
+
+let bindSuccess (disposable: CompositeDisposable) (run: Run) (success: IObservable<bool>) =
+    success
+        .DistinctUntilChanged()
+        .ObserveOn(SynchronizationContext.Current)
+        .Subscribe(fun v -> run.Style <- successDangerRunStyle v)
+    |> disposable.Add
+
+let setVisible (disposable: CompositeDisposable) (visible: IObservable<bool>) (run: Run) =
+    bindVisible disposable run visible
+    run
+
+let setSuccess (disposable: CompositeDisposable) (success: IObservable<bool>) (run: Run) =
+    bindSuccess disposable run success
+    run

@@ -17,7 +17,7 @@ let bindFocus
     =
     value
         .DistinctUntilChanged()
-        .Throttle(TimeSpan.FromMilliseconds(100.0))
+        .Throttle(TimeSpan.FromMilliseconds(50L))
         .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun text -> 
             if not tb.IsFocused then

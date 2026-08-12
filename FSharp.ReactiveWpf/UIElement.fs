@@ -9,15 +9,19 @@ open System.Windows.Controls
 
 open System.Threading
 
-let bindVisible (disposable: CompositeDisposable) (visible: IObservable<bool>) (ui: UIElement) =
+let bindVisible (disposable: CompositeDisposable) (ui: UIElement) (visible: IObservable<bool>) =
     visible
+        .DistinctUntilChanged()
         .ObserveOn(SynchronizationContext.Current)
         .Subscribe(fun visible ->
-        let vis =
-            if visible then
-                Visibility.Visible
-            else
-                Visibility.Hidden
-        ui.Visibility <- vis
-    )
+            ui.Visibility <-
+                if visible then
+                    Visibility.Visible
+                else
+                    Visibility.Hidden
+        )
     |> disposable.Add
+
+let setVisible (disposable: CompositeDisposable) (visible: IObservable<bool>) (ui: UIElement) =
+    bindVisible disposable ui visible
+    ui
