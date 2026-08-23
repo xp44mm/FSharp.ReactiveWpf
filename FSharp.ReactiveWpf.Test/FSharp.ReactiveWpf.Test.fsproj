@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="NumberParserTest.fs" />
+        <Compile Include="BehaviorSubjectTest.fs" />
     </ItemGroup>
 
     <ItemGroup>
