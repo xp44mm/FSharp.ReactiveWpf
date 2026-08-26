@@ -18,8 +18,8 @@
 		<Copyright>xp44mm</Copyright>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         
-		<Version>0.1.8</Version>
-		<PackageReleaseNotes>module FSharp.ReactiveWpf.BehaviorSubject</PackageReleaseNotes>
+		<Version>0.1.9</Version>
+		<PackageReleaseNotes>module FSharp.ReactiveWpf.Subject</PackageReleaseNotes>
         
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.ReactiveWpf</RepositoryUrl>
 		<PackageTags>fsharp;reactive;wpf;xaml</PackageTags>
@@ -34,6 +34,7 @@
 		<EmbeddedResource Include="Row.xaml" />
 		<EmbeddedResource Include="TextBoxWindow.xaml" />
 		<Compile Include="XamlLoader.fs" />
+		<Compile Include="Subject.fs" />
 		<Compile Include="BehaviorSubject.fs" />
 		<Compile Include="ObservableArray.fs" />
 		<Compile Include="Internal.fs" />
@@ -58,6 +59,8 @@
 		<Compile Include="MediaPlayer.fs" />
 		<Compile Include="DependencyObjectUtils.fs" />
 		<Compile Include="GreenWhite.fs" />
+		<Compile Include="TextFileSaver.fs" />
+		<Compile Include="TextFileOpener.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -68,7 +71,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.Idioms" Version="1.5.16" />
+		<PackageReference Include="FSharp.Idioms" Version="1.5.17" />
 		<PackageReference Include="MahApps.Metro" Version="2.4.11" />
 		<PackageReference Include="System.Reactive" Version="7.0.0" />
 	</ItemGroup>
