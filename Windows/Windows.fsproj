@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
@@ -13,6 +13,8 @@
     <ItemGroup>
       <Page Remove="App.xaml" />
       <Page Remove="MainWindow.xaml" />
+      <Page Remove="StyleTestWindow.xaml" />
+      <Page Remove="VisibilityTestWindow.xaml" />
     </ItemGroup>
 
 
@@ -26,8 +28,12 @@
     <ItemGroup>
         <EmbeddedResource Include="App.xaml" />
         <EmbeddedResource Include="MainWindow.xaml" />
+        <EmbeddedResource Include="StyleTestWindow.xaml" />
+        <EmbeddedResource Include="VisibilityTestWindow.xaml" />
         <Compile Include="App.fs" />
         <Compile Include="MainWindow.fs" />
+        <Compile Include="StyleTestWindow.fs" />
+        <Compile Include="VisibilityTestWindow.fs" />
         <Compile Include="Program.fs" />
     </ItemGroup>
 

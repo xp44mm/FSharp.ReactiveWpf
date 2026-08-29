@@ -45,6 +45,10 @@ let create
     bindFocus disposable textbox value
     textbox
 
+let readonly (isreadonly:bool) (textbox: TextBox) =
+    textbox.IsReadOnly <- isreadonly
+    textbox
+
 let defaultStyle =
     match Application.Current.TryFindResource(typeof<TextBox>) with
     | :? Style as style -> style

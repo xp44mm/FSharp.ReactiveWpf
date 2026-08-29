@@ -1,0 +1,35 @@
+<metro:MetroWindow
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+    Title="Style Test"
+    Width="400"
+    Height="300"
+    WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <Style x:Key="NormalStyle" TargetType="Button">
+            <Setter Property="Background" Value="LightGray" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="10,5" />
+        </Style>
+        <Style x:Key="HighlightStyle" TargetType="Button">
+            <Setter Property="Background" Value="Orange" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Padding" Value="10,5" />
+        </Style>
+    </Window.Resources>
+
+    <StackPanel Margin="20">
+        <Button
+            x:Name="toggleButton"
+            Margin="5"
+            Content="Toggle Style" />
+        <Button
+            x:Name="targetButton"
+            Margin="5"
+            Content="Target Button" />
+    </StackPanel>
+
+</metro:MetroWindow>

@@ -1,4 +1,4 @@
-module FSharp.ReactiveWpf.UIElement
+﻿module FSharp.ReactiveWpf.UIElement
 
 open System
 open System.Reactive.Linq
@@ -9,7 +9,11 @@ open System.Windows.Controls
 
 open System.Threading
 
-let bindVisible (disposable: CompositeDisposable) (ui: UIElement) (visible: IObservable<bool>) =
+let bindVisible
+    (disposable: CompositeDisposable)
+    (ui: #UIElement)
+    (visible: IObservable<bool>)
+    =
     visible
         .DistinctUntilChanged()
         .ObserveOn(SynchronizationContext.Current)
@@ -22,6 +26,10 @@ let bindVisible (disposable: CompositeDisposable) (ui: UIElement) (visible: IObs
         )
     |> disposable.Add
 
-let setVisible (disposable: CompositeDisposable) (visible: IObservable<bool>) (ui: UIElement) =
+let setVisible
+    (disposable: CompositeDisposable)
+    (visible: IObservable<bool>)
+    (ui: #UIElement)
+    =
     bindVisible disposable ui visible
     ui

@@ -1,0 +1,25 @@
+<metro:MetroWindow
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:metro="http://metro.mahapps.com/winfx/xaml/controls"
+    Title="Visibility Test"
+    Width="400"
+    Height="300"
+    WindowStartupLocation="CenterScreen">
+
+    <StackPanel Margin="20">
+        <Button
+            x:Name="toggleButton"
+            Margin="5"
+            Content="Toggle Visibility" />
+        <Border
+            x:Name="targetBorder"
+            Margin="5"
+            Padding="20"
+            Background="LightBlue"
+            HorizontalAlignment="Left">
+            <TextBlock Text="I am visible!" FontSize="16" />
+        </Border>
+    </StackPanel>
+
+</metro:MetroWindow>

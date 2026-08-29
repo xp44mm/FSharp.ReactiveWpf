@@ -18,8 +18,8 @@
 		<Copyright>xp44mm</Copyright>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         
-		<Version>0.1.9</Version>
-		<PackageReleaseNotes>module FSharp.ReactiveWpf.Subject</PackageReleaseNotes>
+		<Version>0.1.10</Version>
+		<PackageReleaseNotes>UIElement/FrameworkElement</PackageReleaseNotes>
         
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.ReactiveWpf</RepositoryUrl>
 		<PackageTags>fsharp;reactive;wpf;xaml</PackageTags>
@@ -33,10 +33,10 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Row.xaml" />
 		<EmbeddedResource Include="TextBoxWindow.xaml" />
+		<Compile Include="ObservableArray.fs" />
 		<Compile Include="XamlLoader.fs" />
 		<Compile Include="Subject.fs" />
 		<Compile Include="BehaviorSubject.fs" />
-		<Compile Include="ObservableArray.fs" />
 		<Compile Include="Internal.fs" />
 		<Compile Include="Brushes.fs" />
 		<Compile Include="TableCell.fs" />
@@ -47,6 +47,7 @@
 		<Compile Include="Paragraph.fs" />
 		<Compile Include="Run.fs" />
 		<Compile Include="UIElement.fs" />
+		<Compile Include="FrameworkElement.fs" />
 		<Compile Include="TextBlock.fs" />
 		<Compile Include="TextBox.fs" />
 		<Compile Include="NumberBox.fs" />

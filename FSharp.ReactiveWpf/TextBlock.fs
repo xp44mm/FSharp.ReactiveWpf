@@ -1,9 +1,13 @@
 ﻿module FSharp.ReactiveWpf.TextBlock
 
 open System
+
 open System.Reactive.Linq
 open System.Reactive.Disposables
+
+open System.Windows
 open System.Windows.Controls
+
 open System.Threading
 
 let bind 
@@ -24,4 +28,8 @@ let bind
 let create (disposable: CompositeDisposable) (data: IObservable<string>) =
     let tb = TextBlock()
     bind disposable tb data
+    tb
+
+let textAlignment (ta:TextAlignment) (tb: TextBlock)  =
+    tb.TextAlignment <- ta
     tb

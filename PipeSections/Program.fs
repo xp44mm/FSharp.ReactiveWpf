@@ -1,19 +1,14 @@
-﻿module Windows.Program
+module PipeSections.Program
 
 open System
-
 open System.Threading
 open System.Windows.Threading
 
 SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext())
 
-
 [<STAThread>]
 [<EntryPoint>]
 let main _ =
     let app = App.app
-    //let w = MainWindow.createWindow()
-    //let w = StyleTestWindow.createWindow()
-    let w = VisibilityTestWindow.createWindow()
-
-    app.Run(w)
+    let window = MainWindow.createWindow()
+    app.Run(window)

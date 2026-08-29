@@ -76,7 +76,6 @@ let bindVisible (disposable: CompositeDisposable) (run: Run) (visible: IObservab
     visible
         .DistinctUntilChanged()
         .ObserveOn(SynchronizationContext.Current)
-
         .Subscribe(fun v -> run.Style <- visibleRunStyle v)
     |> disposable.Add
 
