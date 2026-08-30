@@ -49,11 +49,21 @@
                     Background="#DDDDDD"
                     BorderBrush="Gray"
                     BorderThickness="1">
-                    <TextBlock Text="操作" TextAlignment="Center" />
+                    <Button
+                        x:Name="addTopButton"
+                        Padding="8,3"
+                        HorizontalAlignment="Center"
+                        Content="添加" />
                 </Border>
             </StackPanel>
+            
+            <!--  数据行容器：只包含数据行，索引 0 即第一行  -->
+            <StackPanel
+                x:Name="rows"
+                Margin="0,5,0,0"
+                Orientation="Vertical" />
 
-            <!--  工具按钮行：打开 / 保存 / 添加项目  -->
+            <!--  工具按钮行：打开 / 保存  -->
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <Button
                     x:Name="openFileButton"
@@ -65,10 +75,6 @@
                     Margin="0,0,5,0"
                     Padding="8,3"
                     Content="保存..." />
-                <Button
-                    x:Name="addButton"
-                    Padding="8,3"
-                    Content="添加项目" />
             </StackPanel>
 
         </StackPanel>

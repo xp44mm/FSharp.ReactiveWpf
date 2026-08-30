@@ -6,6 +6,9 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>False</UseWindowsForms>
 
+    <!-- 保持嵌入资源名称为 PipeSections.*.xaml，与 App.fs 中 "PipeSections." + filename 匹配 -->
+    <RootNamespace>PipeSections</RootNamespace>
+
     <SatelliteResourceLanguages>zh-Hans;en</SatelliteResourceLanguages>
     <PublishDir>bin\$(MSBuildProjectName)\</PublishDir>
     <CleanPublishFolder>true</CleanPublishFolder>
@@ -23,16 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Json.fs" />
-    <Compile Include="ObservableArray.fs" />
-    <Compile Include="Calculations\Calculation.fs" />
-    <Compile Include="ViewModels\PipeSectionViewModel.fs" />
-    <Compile Include="ViewModels\MainViewModel.fs" />
-    <Compile Include="Bindings\Binding.fs" />
     <EmbeddedResource Include="App.xaml" />
     <EmbeddedResource Include="MainWindow.xaml" />
     <Compile Include="App.fs" />
-    <Compile Include="PipeSection.fs" />      
     <Compile Include="Views\Row.fs" />
     <Compile Include="MainWindow.fs" />
     <Compile Include="Program.fs" />
@@ -50,6 +46,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FSharp.ReactiveWpf\FSharp.ReactiveWpf.fsproj" />
+    <ProjectReference Include="..\PipeSections.cli\PipeSections.cli.fsproj" />
   </ItemGroup>
 
 </Project>
