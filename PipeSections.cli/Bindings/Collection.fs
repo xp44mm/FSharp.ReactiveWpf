@@ -1,6 +1,7 @@
 ﻿module PipeSections.Bindings.Collection
 
 open PipeSections
+open FSharp.Idioms.Reactive
 open System
 open System.Reactive.Disposables
 

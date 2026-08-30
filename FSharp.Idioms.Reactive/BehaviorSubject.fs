@@ -15,7 +15,7 @@ let tryNextDelta (delta: float) (newValue: float) (bs: BehaviorSubject<float>) =
     tryNextWith equals newValue bs
 
 /// Math.Round(x, decimals, MidpointRounding.AwayFromZero)
-let tryNextRounded (decimals: int) (newValue: float) (bs: BehaviorSubject<float>) =
+let tryNextRound (decimals: int) (newValue: float) (bs: BehaviorSubject<float>) =
     let round (x: float) = Math.Round(x, decimals, MidpointRounding.AwayFromZero)
     let equals x y = round x = round y
     tryNextWith equals newValue bs

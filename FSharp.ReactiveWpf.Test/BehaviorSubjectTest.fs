@@ -45,7 +45,7 @@ type BehaviorSubjectTest(output: ITestOutputHelper) =
     member this.``tryNextRounded 仅当四舍五入后值不同时更新``(old: float, next: float) =
         let decimals = 2
         let bs = new BehaviorSubject<_>(old)
-        BehaviorSubject.tryNextRounded decimals next bs
+        BehaviorSubject.tryNextRound decimals next bs
         let round (x:float) = Math.Round(x, decimals, MidpointRounding.AwayFromZero)
         let shouldUpdate = round old <> round next
         let expected = if shouldUpdate then next else old
@@ -55,5 +55,5 @@ type BehaviorSubjectTest(output: ITestOutputHelper) =
     [<Fact>]
     member this.``tryNextRounded 负数 decimals 抛出异常``() =
         let bs = new BehaviorSubject<_>(1.0)
-        let act = fun () -> BehaviorSubject.tryNextRounded -1 2.0 bs |> ignore
+        let act = fun () -> BehaviorSubject.tryNextRound -1 2.0 bs |> ignore
         Assert.Throws<ArgumentOutOfRangeException>(act) |> ignore

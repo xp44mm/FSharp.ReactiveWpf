@@ -11,6 +11,7 @@ open System.Reactive.Disposables
 open MahApps.Metro.Controls
 
 open FSharp.Idioms
+open FSharp.Idioms.Reactive
 
 let jsonFilter = "JSON 文件 (*.json)|*.json|文本文件 (*.txt)|*.txt"
 

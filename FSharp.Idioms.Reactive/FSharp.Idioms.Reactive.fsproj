@@ -1,28 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Authors>xp44mm</Authors>
-    <Copyright>xp44mm</Copyright>
-    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/xp44mm/FSharp.ReactiveWpf</RepositoryUrl>
-    <PackageTags>fsharp;reactive;rx</PackageTags>
-    <Description>System.Reactive 的 F# 响应式工具库，独立于 WPF，可跨平台复用。</Description>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <Authors>xp44mm</Authors>
+        <Copyright>xp44mm</Copyright>
+        <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/xp44mm/FSharp.ReactiveWpf</RepositoryUrl>
+        <PackageTags>fsharp;reactive;rx</PackageTags>
+        <Description>System.Reactive 的 F# 响应式工具库，独立于 WPF，可跨平台复用。</Description>
+        <Title>System.Reactive 的 F# 响应式工具库</Title>
+        <Version>0.0.1</Version>
+        <PackageReleaseNotes>ObservableArray</PackageReleaseNotes>
+        <PackageReadmeFile>readme.md</PackageReadmeFile>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="ObservableArray.fs" />
-    <Compile Include="Subject.fs" />
-    <Compile Include="BehaviorSubject.fs" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Include="ObservableArray.fs" />
+        <Compile Include="Subject.fs" />
+        <Compile Include="BehaviorSubject.fs" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Reactive" Version="7.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+      <None Include="readme.md">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="10.1.400" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Update="FSharp.Core" Version="10.1.400" />
+        <PackageReference Include="System.Reactive" Version="7.0.0" />
+    </ItemGroup>
 
 </Project>

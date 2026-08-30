@@ -4,6 +4,7 @@ open System
 open System.Reactive.Subjects
 open System.Reactive.Linq
 open System.Reactive.Disposables
+open FSharp.Idioms.Reactive
 open FSharp.Idioms.Jsons
 
 /// 主视图模型：管理一组管道截面视图模型

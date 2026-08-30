@@ -8,11 +8,11 @@
 
   <!--
     PipeSections.cli：bindings 之前的纯逻辑层（无 WPF 依赖）。
-    编译顺序与主项目保持一致：Json.fs → ObservableArray.fs → Calculations → ViewModels → Bindings。
+    ObservableArray 已上移到 FSharp.Idioms.Reactive 库。
+    编译顺序：Json.fs → Calculations → ViewModels → Bindings。
   -->
   <ItemGroup>
     <Compile Include="Json.fs" />
-    <Compile Include="ObservableArray.fs" />
     <Compile Include="Calculations\Calculation.fs" />
     <Compile Include="ViewModels\PipeSectionViewModel.fs" />
     <Compile Include="ViewModels\MainViewModel.fs" />
@@ -24,6 +24,10 @@
     <PackageReference Update="FSharp.Core" Version="10.1.400" />
     <PackageReference Include="FSharp.Idioms" Version="1.5.17" />
     <PackageReference Include="System.Reactive" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FSharp.Idioms.Reactive\FSharp.Idioms.Reactive.fsproj" />
   </ItemGroup>
 
 </Project>

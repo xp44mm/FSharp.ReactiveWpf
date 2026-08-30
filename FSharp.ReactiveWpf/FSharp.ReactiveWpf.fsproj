@@ -9,7 +9,7 @@
 		<PublishDir>bin\$(MSBuildProjectName)\</PublishDir>
 		<CleanPublishFolder>true</CleanPublishFolder>
 		<Title>一个用于 F# 和 WPF 的响应式数据绑定库，提供类型安全且函数式的 UI 绑定解决方案。</Title>
-		<Description>System.Reactive &amp; WPF 的响应式数据绑定，F#语言编写</Description>
+		<Description>System.Reactive 并 WPF 的F#响应式数据绑定库</Description>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -18,8 +18,8 @@
 		<Copyright>xp44mm</Copyright>
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
         
-		<Version>0.1.10</Version>
-		<PackageReleaseNotes>UIElement/FrameworkElement</PackageReleaseNotes>
+		<Version>0.2.0</Version>
+		<PackageReleaseNotes>拆分</PackageReleaseNotes>
         
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.ReactiveWpf</RepositoryUrl>
 		<PackageTags>fsharp;reactive;wpf;xaml</PackageTags>
