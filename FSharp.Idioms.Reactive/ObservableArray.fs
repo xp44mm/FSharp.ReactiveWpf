@@ -1,4 +1,4 @@
-﻿namespace FSharp.ReactiveWpf
+﻿namespace FSharp.Idioms.Reactive
 
 open System
 open System.Collections

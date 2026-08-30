@@ -36,23 +36,28 @@ let createWindow () =
             let row = Row.create disposable vm item
             row.Tag <- item
             rows.Children.Add(row) |> ignore
+            Row.renumber rows
 
         | UIElementCollectionChange.AddRange items ->
             for item in items do
                 let row = Row.create disposable vm item
                 row.Tag <- item
                 rows.Children.Add(row) |> ignore
+            Row.renumber rows
 
         | UIElementCollectionChange.Insert(index, item) ->
             let row = Row.create disposable vm item
             row.Tag <- item
             rows.Children.Insert(index, row)
+            Row.renumber rows
 
         | UIElementCollectionChange.RemoveAt(index) -> 
             rows.Children.RemoveAt(index)
+            Row.renumber rows
 
         | UIElementCollectionChange.RemoveRange(index, count) ->
             rows.Children.RemoveRange(index, count)
+            Row.renumber rows
 
         | UIElementCollectionChange.Clear -> rows.Children.Clear()
     )

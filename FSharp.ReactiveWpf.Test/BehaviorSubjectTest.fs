@@ -1,4 +1,4 @@
-﻿namespace FSharp.ReactiveWpf
+﻿namespace FSharp.Idioms.Reactive
 
 open Xunit
 open FSharp.xUnit
@@ -6,7 +6,7 @@ open System
 open System.Reactive.Subjects
 
 // 为了方便，使用类型别名引用模块中的函数
-// 模块名为 FSharp.ReactiveWpf.BehaviorSubject，已在代码中定义
+// 模块名为 FSharp.Idioms.Reactive.BehaviorSubject，已在代码中定义
 // 下面直接通过模块名调用
 
 type BehaviorSubjectTest(output: ITestOutputHelper) =

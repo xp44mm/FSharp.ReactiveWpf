@@ -27,6 +27,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\FSharp.ReactiveWpf\FSharp.ReactiveWpf.fsproj" />
+        <ProjectReference Include="..\FSharp.Idioms.Reactive\FSharp.Idioms.Reactive.fsproj" />
     </ItemGroup>
 
 

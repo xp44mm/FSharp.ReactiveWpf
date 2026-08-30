@@ -78,8 +78,27 @@ let create
     op.Children.Add(insertButton) |> ignore
     op.Children.Add(deleteButton) |> ignore
 
+    // 行号单元格：与表头同色（深底白字），由 renumber 按显示顺序刷新（从 1 开始）
+    let numberTb =
+        TextBlock(
+            TextAlignment = TextAlignment.Center,
+            Foreground = Brushes.White
+        )
+    let numberBorder =
+        Border(
+            Width = 40.0,
+            Padding = Thickness(5.0),
+            Background = SolidColorBrush(Color.FromRgb(0x4Cuy, 0x4Cuy, 0x4Cuy)),
+            BorderBrush = Brushes.Gray,
+            BorderThickness = Thickness(1.0)
+        )
+    numberBorder.Child <- numberTb
+
     // 直径列可编辑，周长、截面积自动计算显示
     let row = StackPanel(Orientation = Orientation.Horizontal)
+
+    row.Children.Add(numberBorder)
+    |> ignore
 
     row.Children.Add(cell 150.0 (numberBox itemvm.diameter))
     |> ignore
@@ -90,10 +109,26 @@ let create
     |> ignore
 
     row.Children.Add(
-        cell 240.0 (textBlock(itemvm.area.Select(fun x -> x.ToString("0.##"))))
+        cell 230.0 (textBlock(itemvm.area.Select(fun x -> x.ToString("0.##"))))
     )
     |> ignore
 
     row.Children.Add(cell 160.0 op)
     |> ignore
     row
+
+/// 按显示顺序刷新每行的行号（行首单元格为行号，从 1 开始）
+let renumber (rows: StackPanel) =
+    rows.Children
+    |> Seq.cast<UIElement>
+    |> Seq.iteri(fun i child ->
+        match child with
+        | :? StackPanel as row when row.Children.Count > 0 ->
+            match row.Children.[0] with
+            | :? Border as border ->
+                match border.Child with
+                | :? TextBlock as tb -> tb.Text <- string (i + 1)
+                | _ -> ()
+            | _ -> ()
+        | _ -> ()
+    )

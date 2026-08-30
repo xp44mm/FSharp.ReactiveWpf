@@ -33,10 +33,7 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Row.xaml" />
 		<EmbeddedResource Include="TextBoxWindow.xaml" />
-		<Compile Include="ObservableArray.fs" />
 		<Compile Include="XamlLoader.fs" />
-		<Compile Include="Subject.fs" />
-		<Compile Include="BehaviorSubject.fs" />
 		<Compile Include="Internal.fs" />
 		<Compile Include="Brushes.fs" />
 		<Compile Include="TableCell.fs" />
@@ -81,4 +78,7 @@
 	  <PackageReference Update="FSharp.Core" Version="10.1.400" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\FSharp.Idioms.Reactive\FSharp.Idioms.Reactive.fsproj" />
+	</ItemGroup>
 </Project>

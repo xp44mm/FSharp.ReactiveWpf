@@ -1,7 +1,7 @@
 <Solution>
+  <Project Path="FSharp.Idioms.Reactive/FSharp.Idioms.Reactive.fsproj" />
   <Project Path="FSharp.ReactiveWpf.Test/FSharp.ReactiveWpf.Test.fsproj" Id="543d2ccf-54d4-4f3e-925e-8ba7a4a897be" />
   <Project Path="FSharp.ReactiveWpf/FSharp.ReactiveWpf.fsproj" />
-  <Project Path="PipeSections/PipeSections.fsproj" />
   <Project Path="PipeSections.cli/PipeSections.cli.fsproj" />
   <Project Path="PipeSections.ui/PipeSections.ui.fsproj" />
   <Project Path="section/section.fsproj" />

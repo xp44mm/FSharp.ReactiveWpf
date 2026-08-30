@@ -1,4 +1,4 @@
-module FSharp.ReactiveWpf.BehaviorSubject
+﻿module FSharp.Idioms.Reactive.BehaviorSubject
 
 open System.Reactive.Subjects
 open System

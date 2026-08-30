@@ -10,77 +10,95 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <StackPanel
-            x:Name="tbl"
-            Margin="10"
-            Orientation="Vertical">
-
-            <!--  表头行  -->
-            <StackPanel Orientation="Horizontal">
-                <Border
-                    Width="150"
-                    Padding="5"
-                    Background="#DDDDDD"
-                    BorderBrush="Gray"
-                    BorderThickness="1">
-                    <TextBlock Text="直径" TextAlignment="Center" />
-                </Border>
-                <Border
-                    Width="80"
-                    Padding="5"
-                    Background="#DDDDDD"
-                    BorderBrush="Gray"
-                    BorderThickness="1">
-                    <TextBlock Text="周长" TextAlignment="Center" />
-                </Border>
-                <Border
-                    Width="240"
-                    Padding="5"
-                    Background="#DDDDDD"
-                    BorderBrush="Gray"
-                    BorderThickness="1">
-                    <TextBlock Text="截面积" TextAlignment="Center" />
-                </Border>
-                <Border
-                    Width="160"
-                    Padding="5"
-                    Background="#DDDDDD"
-                    BorderBrush="Gray"
-                    BorderThickness="1">
-                    <Button
-                        x:Name="addTopButton"
-                        Padding="8,3"
-                        HorizontalAlignment="Center"
-                        Content="添加" />
-                </Border>
-            </StackPanel>
-            
-            <!--  数据行容器：只包含数据行，索引 0 即第一行  -->
-            <StackPanel
-                x:Name="rows"
-                Margin="0,5,0,0"
-                Orientation="Vertical" />
-
-            <!--  工具按钮行：打开 / 保存  -->
-            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+        <!--  表头行  -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <!--  行号列占位，与数据行行号单元格等宽  -->
+            <Border
+                Width="40"
+                Padding="5"
+                Background="#4C4C4C"
+                BorderBrush="Gray"
+                BorderThickness="1" />
+            <Border
+                Width="150"
+                Padding="5"
+                Background="#4C4C4C"
+                BorderBrush="Gray"
+                BorderThickness="1">
+                <TextBlock
+                    Foreground="White"
+                    Text="直径"
+                    TextAlignment="Center" />
+            </Border>
+            <Border
+                Width="80"
+                Padding="5"
+                Background="#4C4C4C"
+                BorderBrush="Gray"
+                BorderThickness="1">
+                <TextBlock
+                    Foreground="White"
+                    Text="周长"
+                    TextAlignment="Center" />
+            </Border>
+            <Border
+                Width="230"
+                Padding="5"
+                Background="#4C4C4C"
+                BorderBrush="Gray"
+                BorderThickness="1">
+                <TextBlock
+                    Foreground="White"
+                    Text="截面积"
+                    TextAlignment="Center" />
+            </Border>
+            <Border
+                Width="160"
+                Padding="5"
+                Background="#4C4C4C"
+                BorderBrush="Gray"
+                BorderThickness="1">
                 <Button
-                    x:Name="openFileButton"
-                    Margin="0,0,5,0"
+                    x:Name="addTopButton"
                     Padding="8,3"
-                    Content="打开..." />
-                <Button
-                    x:Name="saveFileButton"
-                    Margin="0,0,5,0"
-                    Padding="8,3"
-                    Content="保存..." />
-            </StackPanel>
-
+                    HorizontalAlignment="Center"
+                    Content="添加" />
+            </Border>
         </StackPanel>
 
-    </ScrollViewer>
+        <!--  数据行容器：只包含数据行，索引 0 即第一行；充满剩余空间，超出自动滚动  -->
+        <ScrollViewer
+            Grid.Row="1"
+            Margin="0,5,0,0"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="rows" Orientation="Vertical" />
+        </ScrollViewer>
 
+        <!--  工具按钮行：打开 / 保存  -->
+        <StackPanel
+            Grid.Row="2"
+            Margin="0,5,0,0"
+            Orientation="Horizontal">
+            <Button
+                x:Name="openFileButton"
+                Margin="0,0,5,0"
+                Padding="8,3"
+                Content="打开..." />
+            <Button
+                x:Name="saveFileButton"
+                Margin="0,0,5,0"
+                Padding="8,3"
+                Content="保存..." />
+        </StackPanel>
 
+    </Grid>
 
 </metro:MetroWindow>
